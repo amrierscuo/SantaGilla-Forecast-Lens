@@ -248,6 +248,36 @@
       </div>
     </section>
 
+    <section class="section total-history-section" id="panorama" aria-labelledby="totalHistoryTitle">
+      <div class="section-heading total-history-heading">
+        <div>
+          <p class="eyebrow dark" data-i18n="total.eyebrow">Panorama termico completo</p>
+          <h2 id="totalHistoryTitle" data-i18n="total.title">Dal trentennio ricostruito fino a oggi</h2>
+          <p class="section-intro" data-i18n="total.intro">Ogni valore giornaliero contribuisce all'inviluppo. La linea mostra l'andamento mensile, mantenendo visibili estremi e variazioni di lungo periodo.</p>
+        </div>
+      </div>
+      <article class="total-history-panel">
+        <div class="total-summary" aria-label="Sintesi della serie completa" data-i18n-aria="total.summaryAria">
+          <div><span data-i18n="total.period">Periodo</span><b id="totalPeriod">-</b></div>
+          <div><span data-i18n="total.days">Giorni</span><b id="totalDays">-</b></div>
+          <div><span data-i18n="total.mean">Media</span><b id="totalMean">-</b></div>
+          <div><span data-i18n="total.maximum">Massimo</span><b id="totalMaximum">-</b></div>
+        </div>
+        <div class="total-chart-heading">
+          <div class="legend">
+            <span><i class="line total-envelope"></i><span data-i18n="total.dailyEnvelope">Tutti i dati giornalieri</span></span>
+            <span><i class="line total-history"></i><span data-i18n="total.reconstruction">Ricostruzione 1995-2024</span></span>
+            <span><i class="line total-current"></i><span data-i18n="total.current">Modellazione 2025-oggi</span></span>
+          </div>
+        </div>
+        <div class="total-canvas-wrap">
+          <canvas id="totalHistoryChart" role="img" aria-label="Serie termica completa dal 1995 a oggi" data-i18n-aria="total.chartAria"></canvas>
+          <output id="totalChartTooltip" class="total-chart-tooltip" hidden></output>
+        </div>
+        <p class="total-chart-note" data-i18n="total.note">La compressione è solo grafica: minimi e massimi giornalieri restano rappresentati in ogni colonna del grafico.</p>
+      </article>
+    </section>
+
     <section class="section technical-section" aria-labelledby="technicalTitle">
       <aside class="technical-info">
         <div class="technical-copy">
@@ -279,6 +309,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-history30y" defer></script>
+  <script src="./app.js?v=20260810-total-history" defer></script>
 </body>
 </html>

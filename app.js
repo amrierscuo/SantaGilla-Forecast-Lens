@@ -6,6 +6,8 @@ let DATA;
 let selectedDate;
 let currentLang = "it";
 let clockTimer;
+let totalSeriesCache;
+let totalPointerBound = false;
 
 try {
   currentLang = localStorage.getItem("sg-language") === "en" ? "en" : "it";
@@ -112,6 +114,12 @@ const TEXT = {
     "stats.availability": "Ultima disponibilità", "stats.copModel": "Modello Copernicus", "stats.satellite": "Satellite L4",
     "stats.weather": "Meteo", "stats.marineProxy": "Proxy marino",
     "sources.eyebrow": "Tracciabilità", "sources.title": "Cosa usa questa previsione", "sources.open": "Apri la fonte ufficiale ↗",
+    "total.eyebrow": "Panorama termico completo", "total.title": "Dal trentennio ricostruito fino a oggi",
+    "total.intro": "Ogni valore giornaliero contribuisce all'inviluppo. La linea mostra l'andamento mensile, mantenendo visibili estremi e variazioni di lungo periodo.",
+    "total.summaryAria": "Sintesi della serie completa", "total.period": "Periodo", "total.days": "Giorni", "total.mean": "Media", "total.maximum": "Massimo",
+    "total.dailyEnvelope": "Tutti i dati giornalieri", "total.reconstruction": "Ricostruzione 1995-2024", "total.current": "Modellazione 2025-oggi",
+    "total.chartAria": "Serie termica completa dal 1995 a oggi", "total.note": "La compressione è solo grafica: minimi e massimi giornalieri restano rappresentati in ogni colonna del grafico.",
+    "total.reconstructedType": "Ricostruzione", "total.modelledType": "Modellazione recente",
     "footer.prototype": "Prototipo scientifico operativo. Non adatto alla navigazione o ad allerta sanitaria.",
     "footer.texture": "Texture visive adattate dagli asset Computational-Physics / MQ.", "footer.project": "Progetto", "footer.data": "Dati", "footer.notes": "Note",
     noscript: "Il tool richiede JavaScript per grafici e selezione delle date.",
@@ -230,6 +238,12 @@ const TEXT = {
     "stats.availability": "Latest availability", "stats.copModel": "Copernicus model", "stats.satellite": "L4 satellite",
     "stats.weather": "Weather", "stats.marineProxy": "Marine proxy",
     "sources.eyebrow": "Traceability", "sources.title": "What this forecast uses", "sources.open": "Open official source ↗",
+    "total.eyebrow": "Complete thermal overview", "total.title": "From the reconstructed thirty-year period to today",
+    "total.intro": "Every daily value contributes to the envelope. The line shows the monthly pattern while preserving extremes and long-term variation.",
+    "total.summaryAria": "Complete series summary", "total.period": "Period", "total.days": "Days", "total.mean": "Mean", "total.maximum": "Maximum",
+    "total.dailyEnvelope": "All daily data", "total.reconstruction": "Reconstruction 1995-2024", "total.current": "Modelling 2025-today",
+    "total.chartAria": "Complete thermal series from 1995 to today", "total.note": "Compression is graphical only: daily minima and maxima remain represented in every chart column.",
+    "total.reconstructedType": "Reconstruction", "total.modelledType": "Recent modelling",
     "footer.prototype": "Operational scientific prototype. Not suitable for navigation or public-health alerts.",
     "footer.texture": "Visual textures adapted from Computational-Physics / MQ assets.", "footer.project": "Project", "footer.data": "Data", "footer.notes": "Notes",
     noscript: "This tool requires JavaScript for charts and date selection.",
@@ -396,6 +410,7 @@ function applyLanguage(lang, persist = true) {
     updateMultimodel();
     updateModelSkill();
     updateAirVerification();
+    renderTotalHistory();
   }
 }
 
@@ -1042,6 +1057,181 @@ function drawAirChart(rows) {
   drawSeries(frame, corrected, COLORS.corrected, 2.1, [5, 3]);
 }
 
+function totalThermalSeries() {
+  if (totalSeriesCache) return totalSeriesCache;
+  const values = new Map();
+  DATA.water_reconstruction.forEach((row) => {
+    if (row.date <= DATA.meta.reference_date && Number.isFinite(row.reconstructed_c)) {
+      values.set(row.date, { date: row.date, value: row.reconstructed_c, kind: "reconstruction" });
+    }
+  });
+  DATA.water_history.filter((row) => Number(row.lead_days) === 1).forEach((row) => {
+    if (row.date <= DATA.meta.reference_date && Number.isFinite(row.reference_model_c)) {
+      values.set(row.date, { date: row.date, value: row.reference_model_c, kind: "recent" });
+    }
+  });
+  DATA.water_forecast.forEach((row) => {
+    if (row.date <= DATA.meta.reference_date && Number.isFinite(row.glm_c)) {
+      values.set(row.date, { date: row.date, value: row.glm_c, kind: "recent" });
+    }
+  });
+  totalSeriesCache = [...values.values()]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((row) => ({ ...row, time: new Date(`${row.date}T12:00:00Z`).getTime() }));
+  return totalSeriesCache;
+}
+
+function totalMonthlySeries(rows) {
+  const buckets = new Map();
+  rows.forEach((row) => {
+    const key = row.date.slice(0, 7);
+    const bucket = buckets.get(key) || { key, sum: 0, count: 0, kind: row.kind };
+    bucket.sum += row.value;
+    bucket.count += 1;
+    if (row.kind === "recent") bucket.kind = "recent";
+    buckets.set(key, bucket);
+  });
+  return [...buckets.values()].sort((a, b) => a.key.localeCompare(b.key)).map((bucket) => ({
+    date: `${bucket.key}-15`,
+    time: new Date(`${bucket.key}-15T12:00:00Z`).getTime(),
+    value: bucket.sum / bucket.count,
+    kind: bucket.kind,
+  }));
+}
+
+function drawTotalHistoryChart() {
+  if (!DATA) return;
+  const rows = totalThermalSeries();
+  const canvas = $("#totalHistoryChart");
+  if (!canvas || !rows.length) return;
+  const { ctx, width, height } = canvasContext(canvas);
+  const pad = { left: 47, right: 15, top: 18, bottom: 34 };
+  const plotWidth = width - pad.left - pad.right;
+  const plotHeight = height - pad.top - pad.bottom;
+  const t0 = rows[0].time;
+  const t1 = rows.at(-1).time;
+  const min = Math.floor(Math.min(...rows.map((row) => row.value)) - 0.5);
+  const max = Math.ceil(Math.max(...rows.map((row) => row.value)) + 0.5);
+  const x = (time) => pad.left + ((time - t0) / Math.max(1, t1 - t0)) * plotWidth;
+  const y = (value) => pad.top + ((max - value) / Math.max(1, max - min)) * plotHeight;
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.font = "10px Segoe UI, sans-serif";
+  ctx.lineWidth = 1;
+  for (let step = 0; step <= 4; step += 1) {
+    const value = min + ((max - min) * step) / 4;
+    const yy = y(value);
+    ctx.strokeStyle = COLORS.grid;
+    ctx.beginPath(); ctx.moveTo(pad.left, yy); ctx.lineTo(width - pad.right, yy); ctx.stroke();
+    ctx.fillStyle = COLORS.muted; ctx.textAlign = "right";
+    ctx.fillText(`${formatNumber(value, 1)}°`, pad.left - 7, yy + 3);
+  }
+
+  const firstYear = Number(rows[0].date.slice(0, 4));
+  const lastYear = Number(rows.at(-1).date.slice(0, 4));
+  const years = [firstYear];
+  for (let year = Math.ceil(firstYear / 5) * 5; year <= lastYear; year += 5) years.push(year);
+  if (years.at(-1) !== lastYear) years.push(lastYear);
+  [...new Set(years)].forEach((year) => {
+    const xx = x(new Date(`${year}-01-01T12:00:00Z`).getTime());
+    ctx.strokeStyle = "rgba(220,230,225,.62)";
+    ctx.beginPath(); ctx.moveTo(xx, pad.top); ctx.lineTo(xx, height - pad.bottom); ctx.stroke();
+    ctx.fillStyle = COLORS.muted; ctx.textAlign = "center";
+    ctx.fillText(String(year), xx, height - 13);
+  });
+
+  const bins = Array.from({ length: Math.max(1, Math.floor(plotWidth)) }, () => null);
+  rows.forEach((row) => {
+    const index = Math.max(0, Math.min(bins.length - 1, Math.floor(x(row.time) - pad.left)));
+    const bucket = bins[index] || { min: row.value, max: row.value };
+    bucket.min = Math.min(bucket.min, row.value);
+    bucket.max = Math.max(bucket.max, row.value);
+    bins[index] = bucket;
+  });
+  ctx.strokeStyle = "rgba(26,163,163,.22)";
+  bins.forEach((bucket, index) => {
+    if (!bucket) return;
+    const xx = pad.left + index + 0.5;
+    ctx.beginPath(); ctx.moveTo(xx, y(bucket.min)); ctx.lineTo(xx, y(bucket.max)); ctx.stroke();
+  });
+
+  const monthly = totalMonthlySeries(rows);
+  const drawMonthly = (kind, color, lineWidth) => {
+    ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.lineJoin = "round"; ctx.lineCap = "round";
+    ctx.beginPath();
+    let active = false;
+    let previousTime = null;
+    monthly.forEach((row) => {
+      if (row.kind !== kind) { active = false; previousTime = null; return; }
+      const gapDays = previousTime === null ? 0 : (row.time - previousTime) / 86400000;
+      if (!active || gapDays > 62) { ctx.moveTo(x(row.time), y(row.value)); active = true; }
+      else ctx.lineTo(x(row.time), y(row.value));
+      previousTime = row.time;
+    });
+    ctx.stroke();
+  };
+  drawMonthly("reconstruction", "#315f56", 2.2);
+  drawMonthly("recent", COLORS.ours, 3.6);
+
+  const maximum = rows.reduce((best, row) => row.value > best.value ? row : best, rows[0]);
+  ctx.fillStyle = COLORS.ours;
+  ctx.beginPath(); ctx.arc(x(maximum.time), y(maximum.value), 3.4, 0, Math.PI * 2); ctx.fill();
+  canvas._totalChart = { rows, pad, width, height, t0, t1, x, y };
+}
+
+function nearestTotalRow(rows, targetTime) {
+  let low = 0;
+  let high = rows.length - 1;
+  while (low < high) {
+    const middle = Math.floor((low + high) / 2);
+    if (rows[middle].time < targetTime) low = middle + 1;
+    else high = middle;
+  }
+  if (low === 0) return rows[0];
+  return Math.abs(rows[low].time - targetTime) < Math.abs(rows[low - 1].time - targetTime) ? rows[low] : rows[low - 1];
+}
+
+function showTotalTooltip(event) {
+  const canvas = $("#totalHistoryChart");
+  const tooltip = $("#totalChartTooltip");
+  const chart = canvas?._totalChart;
+  if (!chart) return;
+  const rect = canvas.getBoundingClientRect();
+  const localX = (event.clientX - rect.left) * (chart.width / rect.width);
+  if (localX < chart.pad.left || localX > chart.width - chart.pad.right) { tooltip.hidden = true; return; }
+  const targetTime = chart.t0 + ((localX - chart.pad.left) / (chart.width - chart.pad.left - chart.pad.right)) * (chart.t1 - chart.t0);
+  const row = nearestTotalRow(chart.rows, targetTime);
+  const cssX = chart.x(row.time) * (rect.width / chart.width);
+  const cssY = chart.y(row.value) * (rect.height / chart.height);
+  tooltip.innerHTML = `<span>${localDate(row.date)}</span><b>${number(row.value, 2)}</b><span>${t(row.kind === "reconstruction" ? "total.reconstructedType" : "total.modelledType")}</span>`;
+  tooltip.style.left = `${Math.max(72, Math.min(rect.width - 72, cssX))}px`;
+  tooltip.style.top = `${Math.max(58, cssY)}px`;
+  tooltip.hidden = false;
+}
+
+function bindTotalHistoryPointer() {
+  if (totalPointerBound) return;
+  const canvas = $("#totalHistoryChart");
+  if (!canvas) return;
+  canvas.addEventListener("pointermove", showTotalTooltip);
+  canvas.addEventListener("pointerdown", showTotalTooltip);
+  canvas.addEventListener("pointerleave", () => { $("#totalChartTooltip").hidden = true; });
+  totalPointerBound = true;
+}
+
+function renderTotalHistory() {
+  const rows = totalThermalSeries();
+  if (!rows.length) return;
+  const maximum = rows.reduce((best, row) => row.value > best.value ? row : best, rows[0]);
+  const mean = rows.reduce((sum, row) => sum + row.value, 0) / rows.length;
+  $("#totalPeriod").textContent = `${localDate(rows[0].date)} - ${localDate(rows.at(-1).date)}`;
+  $("#totalDays").textContent = new Intl.NumberFormat(locale()).format(rows.length);
+  $("#totalMean").textContent = number(mean, 2);
+  $("#totalMaximum").textContent = `${number(maximum.value, 2)} · ${localDate(maximum.date)}`;
+  drawTotalHistoryChart();
+  bindTotalHistoryPointer();
+}
+
 function renderSources() {
   $("#sourceList").innerHTML = DATA.sources.map((source) => {
     const role = currentLang === "en" ? (SOURCE_ROLE_EN[source.role] ?? source.role) : source.role;
@@ -1111,7 +1301,7 @@ function bindEvents() {
   $("#leadSelect").addEventListener("change", updateAirVerification);
   $("#refreshCopernicus").addEventListener("click", refreshPublicData);
   let resizeTimer;
-  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { drawWaterChart(); drawSkillChart(); updateAirVerification(); }, 150); });
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { drawWaterChart(); drawSkillChart(); updateAirVerification(); drawTotalHistoryChart(); }, 150); });
 }
 
 async function init() {
@@ -1129,6 +1319,7 @@ async function init() {
     }
     DATA.water_history = DATA.water_history || [];
     DATA.water_reconstruction = DATA.water_reconstruction || [];
+    totalSeriesCache = null;
     setGeneratedDate();
     renderDatasetStats();
     renderSources();
@@ -1137,6 +1328,7 @@ async function init() {
     updateMultimodel();
     updateModelSkill();
     updateAirVerification();
+    renderTotalHistory();
   } catch (error) {
     $("#truthBanner").textContent = t("dynamic.dataError");
     console.error(error);
