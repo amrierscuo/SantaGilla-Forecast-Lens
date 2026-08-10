@@ -6,6 +6,12 @@ Il selettore anno espone la ricostruzione giornaliera ufficiale 1995-2024: 10.95
 
 Il panorama termico in fondo riunisce i valori disponibili dal 1995 al giorno corrente. Tutti i dati giornalieri alimentano un inviluppo min-max per colonna, mentre le medie mensili rendono leggibile l'andamento di lungo periodo anche su schermi mobili.
 
+## Tutorial rapido
+
+[![Apri il tutorial di 11 secondi](tutorial-poster.jpg)](tutorial.mp4)
+
+[Apri direttamente tutorial.mp4](tutorial.mp4)
+
 ## Confine scientifico
 
 La temperatura lagunare e la temperatura marina offshore non rappresentano lo stesso target. Il confronto misura un contrasto spaziale e non costituisce una validazione diretta del modello lagunare.

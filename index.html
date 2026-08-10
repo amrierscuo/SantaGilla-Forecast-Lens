@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png?v=20260810-photo">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-hw-status">
+  <link rel="stylesheet" href="./styles.css?v=20260810-tutorial">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -282,6 +282,22 @@
       </article>
     </section>
 
+    <section class="section tutorial-section" id="tutorial" aria-labelledby="tutorialTitle">
+      <div class="section-heading tutorial-heading">
+        <div>
+          <p class="eyebrow dark" data-i18n="tutorial.eyebrow">Guida rapida</p>
+          <h2 id="tutorialTitle" data-i18n="tutorial.title">Il tool in 11 secondi</h2>
+          <p class="section-intro" data-i18n="tutorial.intro">Modalità OLED, confronto giornaliero, grafici, verifica, statistiche e fonti in una sola sequenza.</p>
+        </div>
+      </div>
+      <div class="tutorial-player">
+        <video controls preload="metadata" playsinline poster="./tutorial-poster.jpg">
+          <source src="./tutorial.mp4" type="video/mp4">
+          <span data-i18n="tutorial.fallback">Il browser non supporta il video.</span>
+        </video>
+      </div>
+    </section>
+
     <section class="section technical-section" aria-labelledby="technicalTitle">
       <aside class="technical-info">
         <div class="technical-copy">
@@ -313,6 +329,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-percentile-meaning" defer></script>
+  <script src="./app.js?v=20260810-tutorial" defer></script>
 </body>
 </html>
