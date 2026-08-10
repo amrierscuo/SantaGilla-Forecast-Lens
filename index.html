@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-stats">
+  <link rel="stylesheet" href="./styles.css?v=20260810-clean">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -113,7 +113,7 @@
           <article class="model-metric"><span data-i18n="mm.winner">Vincitore recursive</span><b class="model-name" id="mmWinnerModel">-</b><small id="mmWinnerNote">-</small></article>
         </div>
         <div class="model-status-line"><b id="mmIssueStatus">-</b><span id="mmFreshnessStatus">-</span></div>
-        <p class="model-disclosure" data-i18n="mm.disclosure">Le curve operative pubbliche sono un replay locale a risorse limitate. Le metriche di skill qui sotto restano quelle ufficiali del full run 03.</p>
+        <p class="model-disclosure" data-i18n="mm.disclosure">Le metriche di skill riportate sotto derivano dal full run ufficiale del notebook 03.</p>
       </section>
 
       <div class="two-column">
@@ -152,7 +152,7 @@
         <div>
           <p class="eyebrow dark" data-i18n="skill.eyebrow">Skill ufficiale notebook 03</p>
           <h2 id="skillTitle" data-i18n="skill.title">Quale famiglia vince a ogni orizzonte?</h2>
-          <p class="section-intro" data-i18n="skill.intro">Sono pubblicate solo metriche aggregate. Full run direct, sanity check observed-day e recursive hanno protocolli diversi e non sono una classifica unica.</p>
+          <p class="section-intro" data-i18n="skill.intro">Full run direct, sanity check observed-day e recursive hanno protocolli diversi e non costituiscono una classifica unica.</p>
         </div>
         <label class="select-control"><span data-i18n="skill.horizon">Orizzonte</span><select id="skillLeadSelect"><option value="1">+1</option><option value="3">+3</option><option value="5">+5</option><option value="7">+7</option><option value="14">+14</option></select></label>
       </div>
@@ -172,7 +172,7 @@
           </div>
         </div>
         <div class="canvas-wrap"><canvas id="skillChart" role="img" aria-label="Metriche aggregate del notebook 03" data-i18n-aria="skill.chartAria"></canvas></div>
-        <div class="chart-foot"><span id="skillSampleNote"></span><span data-i18n="skill.privacy">Nessuna temperatura d'acqua osservata riga-per-riga e pubblicata.</span></div>
+        <div class="chart-foot"><span id="skillSampleNote"></span></div>
       </article>
     </section>
 
@@ -212,9 +212,8 @@
         <div>
           <p class="eyebrow dark" data-i18n="stats.eyebrow">Copertura pubblica</p>
           <h2 id="datasetTitle" data-i18n="stats.title">Dataset in numeri</h2>
-          <p class="section-intro" data-i18n="stats.intro">Conteggi calcolati direttamente dallo snapshot pubblico, senza esporre dati osservativi privati.</p>
+          <p class="section-intro" data-i18n="stats.intro">Conteggi calcolati direttamente dallo snapshot operativo.</p>
         </div>
-        <span class="dataset-version" id="datasetVersion">v-</span>
       </div>
 
       <div class="dataset-stat-grid">
@@ -243,20 +242,8 @@
 
     <section class="section source-section" id="fonti" aria-labelledby="sourcesTitle">
       <div class="section-heading"><div><p class="eyebrow dark" data-i18n="sources.eyebrow">Tracciabilità</p><h2 id="sourcesTitle" data-i18n="sources.title">Cosa usa questa previsione</h2></div></div>
-      <div class="source-layout">
+      <div class="source-layout source-only">
         <div class="source-list" id="sourceList"></div>
-        <aside class="privacy-card">
-          <span class="privacy-badge" data-i18n="privacy.badge">PRIVATO</span>
-          <h3 data-i18n="privacy.title">Confine privato</h3>
-          <p data-i18n="privacy.text">Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.</p>
-          <div class="privacy-facts" aria-label="Garanzie di riservatezza" data-i18n-aria="privacy.factsAria">
-            <span data-i18n="privacy.fact1">Solo risultati aggregati</span>
-            <span data-i18n="privacy.fact2">Nessun login o database</span>
-            <span data-i18n="privacy.fact3">Nessuna scrittura pubblica</span>
-            <span data-i18n="privacy.fact4">Nessun identificativo di stazione</span>
-          </div>
-          <a href="./DATA_POLICY.md" data-i18n="privacy.policy">Leggi la policy dati</a>
-        </aside>
       </div>
     </section>
 
@@ -278,7 +265,6 @@
             <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01 + MM 03</dd></div>
             <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
           </dl>
-          <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
         </div>
       </aside>
     </section>
@@ -292,6 +278,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-stats" defer></script>
+  <script src="./app.js?v=20260810-clean" defer></script>
 </body>
 </html>
