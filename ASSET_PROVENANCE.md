@@ -8,6 +8,7 @@ Il sistema di cornici materiche del sito deriva da asset locali del progetto Com
 | `assets/textures/quantum-metal.jpg` | `Args/Phy/MQ/boss/assets3d/tex_metal_2048.jpg` | Evidenza del forecast enhanced |
 | `assets/textures/quantum-marble.jpg` | `Args/Phy/MQ/boss/assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Color.jpg` | Pannelli scientifici e contesto |
 | `assets/icons/*.svg` | [Lucide Icons](https://github.com/lucide-icons/lucide) | Icone meteorologiche vettoriali |
+| `og.png` | `IMG_20260810_203415.jpg`, fotografia originale di Mirco Aresu a Molentargius | Copertina social ritagliata e adattata con il titolo `HW e Copernicus` |
 
 Le copie pubbliche sono state ridimensionate e compresse per il web. Le texture restano confinate alle cornici e agli sfondi a bassa opacità, così grafici, valori e testi mantengono contrasto e leggibilità.
 
