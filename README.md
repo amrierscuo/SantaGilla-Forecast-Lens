@@ -8,9 +8,9 @@ Il panorama termico in fondo riunisce i valori disponibili dal 1995 al giorno co
 
 ## Tutorial rapido
 
-[![Apri il tutorial di 11 secondi](tutorial-poster.jpg)](tutorial.mp4)
+![Tutorial rapido di Santa Gilla Forecast Lens](tutorial.gif)
 
-[Apri direttamente tutorial.mp4](tutorial.mp4)
+[Apri la versione MP4](tutorial.mp4)
 
 ## Confine scientifico
 
