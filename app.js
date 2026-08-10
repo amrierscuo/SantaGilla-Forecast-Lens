@@ -851,7 +851,7 @@ function renderWeather(row) {
     { icon: "sun-medium", tone: "uv", title: t("weather.uv"), detail: row ? formatNumber(row.uv_index_max, 1) : unavailable },
     { icon: "sunrise", tone: "sunshine", title: t("weather.sunshine"), detail: sunshine !== null ? t("weather.hours", { hours: formatNumber(sunshine, 1) }) : unavailable }
   ];
-  $("#weatherRow").innerHTML = items.map((item) => `<article class="weather-card"><span class="weather-icon-shell ${item.tone}" aria-hidden="true"><img src="./assets/icons/${item.icon}.svg" alt="" width="28" height="28"></span><b>${item.title}</b><span class="weather-detail">${item.detail}</span></article>`).join("");
+  $("#weatherRow").innerHTML = items.map((item) => `<article class="weather-card"><span class="weather-icon-shell ${item.tone}" aria-hidden="true"><img src="./assets/icons/${item.icon}.svg" alt="" width="28" height="28"></span><span class="weather-copy"><b>${item.title}</b><span class="weather-detail">${item.detail}</span></span></article>`).join("");
 }
 
 function canvasContext(canvas) {
