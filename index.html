@@ -3,54 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.">
+  <meta name="description" data-i18n-content="meta.description" content="Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.">
   <meta name="theme-color" content="#123f3b">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Santa Gilla Forecast Lens">
   <meta property="og:description" content="Laguna modellata. Mare osservato. Differenze leggibili.">
-  <meta property="og:url" content="https://amrierscuo.github.io/SantaGilla-Forecast/">
-  <meta property="og:image" content="https://amrierscuo.github.io/SantaGilla-Forecast/og.png">
+  <meta property="og:url" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/">
+  <meta property="og:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Santa Gilla Forecast Lens">
   <meta name="twitter:description" content="Laguna modellata. Mare osservato. Differenze leggibili.">
-  <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast/og.png">
+  <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">Vai al contenuto</a>
+  <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
   <header class="hero">
-    <nav class="nav" aria-label="Navigazione principale">
+    <nav class="nav" aria-label="Navigazione principale" data-i18n-aria="nav.label">
       <a class="brand" href="#top" aria-label="Santa Gilla Forecast Lens">
         <span class="brand-mark" aria-hidden="true">SG</span>
         <span><b>Forecast Lens</b><small>Santa Gilla</small></span>
       </a>
-      <div class="nav-links">
-        <a href="#acqua">Acqua</a>
-        <a href="#verifica">Verifica</a>
-        <a href="#fonti">Fonti</a>
+      <div class="nav-actions">
+        <div class="nav-links">
+          <a href="#acqua" data-i18n="nav.water">Acqua</a>
+          <a href="#verifica" data-i18n="nav.verify">Verifica</a>
+          <a href="#fonti" data-i18n="nav.sources">Fonti</a>
+        </div>
+        <div class="language-switch" role="group" aria-label="Lingua" data-i18n-aria="language.label">
+          <button type="button" data-lang="it" aria-pressed="true" aria-label="Italiano">IT</button>
+          <button type="button" data-lang="en" aria-pressed="false" aria-label="English">EN</button>
+        </div>
       </div>
     </nav>
     <div class="hero-grid" id="top">
       <div class="hero-copy">
-        <p class="eyebrow">Indicatore operativo scientifico</p>
-        <h1>Previsione lagunare e mare aperto, nello stesso quadro.</h1>
-        <p class="hero-lead">Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.</p>
+        <p class="eyebrow" data-i18n="hero.eyebrow">Indicatore operativo scientifico</p>
+        <h1 data-i18n="hero.title">Previsione lagunare e mare aperto, nello stesso quadro.</h1>
+        <p class="hero-lead" data-i18n="hero.lead">Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#acqua">Confronta oggi</a>
-          <a class="button ghost" href="#metodo">Come leggere i dati</a>
+          <a class="button primary" href="#acqua" data-i18n="hero.compare">Confronta oggi</a>
+          <a class="button ghost" href="#metodo" data-i18n="hero.method">Come leggere i dati</a>
         </div>
       </div>
-      <aside class="hero-status" aria-label="Stato del prodotto">
-        <div class="status-line"><span class="pulse" aria-hidden="true"></span><b>Snapshot verificato</b></div>
-        <div class="status-date" id="generatedDate">Caricamento</div>
+      <aside class="hero-status" aria-label="Stato del prodotto" data-i18n-aria="status.aria">
+        <div class="status-line"><span class="pulse" aria-hidden="true"></span><b data-i18n="status.snapshot">Snapshot verificato</b></div>
+        <div class="status-date" id="generatedDate" data-i18n="status.loading">Caricamento</div>
         <dl>
-          <div><dt>Area</dt><dd>Santa Gilla</dd></div>
-          <div><dt>Modello</dt><dd>GLM 01</dd></div>
-          <div><dt>Accesso</dt><dd>Read-only</dd></div>
+          <div><dt data-i18n="status.area">Area</dt><dd>Santa Gilla</dd></div>
+          <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01</dd></div>
+          <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
         </dl>
-        <p>Nessun dato osservativo privato è distribuito dal sito.</p>
+        <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
       </aside>
     </div>
   </header>
@@ -59,14 +65,14 @@
     <section class="section date-console" id="acqua" aria-labelledby="waterTitle">
       <div class="section-heading">
         <div>
-          <p class="eyebrow dark">Confronto termico giornaliero</p>
-          <h2 id="waterTitle">Acqua modellata e contesto Copernicus</h2>
+          <p class="eyebrow dark" data-i18n="water.eyebrow">Confronto termico giornaliero</p>
+          <h2 id="waterTitle" data-i18n="water.title">Acqua modellata e contesto Copernicus</h2>
         </div>
-        <div class="date-controls" aria-label="Seleziona la data">
-          <button id="prevDate" class="icon-button" type="button" aria-label="Data precedente">‹</button>
-          <label><span>Data</span><input id="datePicker" type="date"></label>
-          <button id="nextDate" class="icon-button" type="button" aria-label="Data successiva">›</button>
-          <button id="todayButton" class="text-button" type="button">Oggi</button>
+        <div class="date-controls" aria-label="Seleziona la data" data-i18n-aria="water.dateSelector">
+          <button id="prevDate" class="icon-button" type="button" aria-label="Data precedente" data-i18n-aria="water.previous">←</button>
+          <label><span data-i18n="water.date">Data</span><input id="datePicker" type="date"></label>
+          <button id="nextDate" class="icon-button" type="button" aria-label="Data successiva" data-i18n-aria="water.next">→</button>
+          <button id="todayButton" class="text-button" type="button" data-i18n="water.today">Oggi</button>
         </div>
       </div>
 
@@ -74,125 +80,125 @@
 
       <div class="kpi-grid">
         <article class="kpi enhanced">
-          <div class="kpi-top"><span>Enhanced</span><span class="source-pill ours">Nostro modello</span></div>
-          <h3>Acqua Santa Gilla</h3>
+          <div class="kpi-top"><span>Enhanced</span><span class="source-pill ours" data-i18n="water.ourModel">Nostro modello</span></div>
+          <h3 data-i18n="water.lagoon">Acqua Santa Gilla</h3>
           <div class="value" id="glmValue">-</div>
-          <p id="glmRange">Intervallo non disponibile</p>
+          <p id="glmRange" data-i18n="water.rangeUnavailable">Intervallo non disponibile</p>
         </article>
         <article class="kpi copernicus">
           <div class="kpi-top"><span>Offshore</span><span class="source-pill cop">Copernicus</span></div>
-          <h3>Modello Mediterraneo</h3>
+          <h3 data-i18n="water.medModel">Modello Mediterraneo</h3>
           <div class="value" id="copValue">-</div>
-          <p>Superficie, Golfo di Cagliari</p>
+          <p data-i18n="water.surface">Superficie, Golfo di Cagliari</p>
         </article>
         <article class="kpi satellite">
-          <div class="kpi-top"><span>Osservazione L4</span><span class="source-pill sat">Satellite</span></div>
+          <div class="kpi-top"><span data-i18n="water.observation">Osservazione L4</span><span class="source-pill sat">Satellite</span></div>
           <h3>SST offshore</h3>
           <div class="value" id="satValue">-</div>
-          <p id="satDate">Ultimo dato disponibile</p>
+          <p id="satDate" data-i18n="water.lastAvailable">Ultimo dato disponibile</p>
         </article>
         <article class="kpi context">
-          <div class="kpi-top"><span>Pubblico</span><span class="source-pill proxy">Proxy</span></div>
+          <div class="kpi-top"><span data-i18n="water.public">Pubblico</span><span class="source-pill proxy">Proxy</span></div>
           <h3>Marine API offshore</h3>
           <div class="value" id="proxyValue">-</div>
-          <p id="proxyRange">Min e max giornalieri</p>
+          <p id="proxyRange" data-i18n="water.dailyMinMax">Min e max giornalieri</p>
         </article>
       </div>
 
-      <div class="comparison-strip" aria-label="Differenze calcolate">
-        <div><span>Copernicus meno GLM</span><b id="diffCopGlm">-</b></div>
-        <div><span>Satellite meno GLM</span><b id="diffSatGlm">-</b></div>
-        <div><span>Copernicus meno satellite</span><b id="diffCopSat">-</b></div>
-        <button id="refreshCopernicus" class="refresh-button" type="button">Aggiorna dato pubblico</button>
+      <div class="comparison-strip" aria-label="Differenze calcolate" data-i18n-aria="diff.aria">
+        <div><span data-i18n="diff.copGlm">Copernicus meno GLM</span><b id="diffCopGlm">-</b></div>
+        <div><span data-i18n="diff.satGlm">Satellite meno GLM</span><b id="diffSatGlm">-</b></div>
+        <div><span data-i18n="diff.copSat">Copernicus meno satellite</span><b id="diffCopSat">-</b></div>
+        <button id="refreshCopernicus" class="refresh-button" type="button" data-i18n="diff.refresh">Aggiorna dato pubblico</button>
       </div>
 
       <div class="two-column">
         <article class="panel chart-panel">
           <div class="panel-heading">
-            <div><h3>Traiettoria termica</h3><p>Laguna modellata e superficie offshore non sono lo stesso target.</p></div>
-            <div class="legend" aria-label="Legenda">
+            <div><h3 data-i18n="trajectory.title">Traiettoria termica</h3><p data-i18n="trajectory.subtitle">Laguna modellata e superficie offshore non sono lo stesso target.</p></div>
+            <div class="legend" aria-label="Legenda" data-i18n-aria="trajectory.legend">
               <span><i class="line ours"></i>GLM</span>
               <span><i class="line cop"></i>Copernicus</span>
               <span><i class="line sat"></i>Satellite</span>
             </div>
           </div>
-          <div class="canvas-wrap"><canvas id="waterChart" role="img" aria-label="Grafico della traiettoria termica"></canvas></div>
-          <div id="waterTable" class="sr-only" aria-label="Dati del grafico termico"></div>
+          <div class="canvas-wrap"><canvas id="waterChart" role="img" aria-label="Grafico della traiettoria termica" data-i18n-aria="trajectory.chartAria"></canvas></div>
+          <div id="waterTable" class="sr-only" aria-label="Dati del grafico termico" data-i18n-aria="trajectory.tableAria"></div>
         </article>
         <aside class="panel reading-panel" id="metodo">
-          <p class="eyebrow dark">Lettura corretta</p>
-          <h3 id="readingTitle">Confronto, non validazione diretta</h3>
-          <p id="readingText">Il modello Copernicus non risolve l’interno della laguna. La differenza quantifica il contrasto tra la stima lagunare e il mare esterno.</p>
+          <p class="eyebrow dark" data-i18n="reading.eyebrow">Lettura corretta</p>
+          <h3 id="readingTitle" data-i18n="reading.defaultTitle">Confronto, non validazione diretta</h3>
+          <p id="readingText" data-i18n="reading.defaultText">Il modello Copernicus non risolve l’interno della laguna. La differenza quantifica il contrasto tra la stima lagunare e il mare esterno.</p>
           <div class="thresholds">
-            <div><span>Anomalia GLM</span><b id="anomalyValue">-</b></div>
-            <div><span>Soglia p90</span><b id="p90Value">-</b></div>
-            <div><span>Soglia p95</span><b id="p95Value">-</b></div>
+            <div><span data-i18n="reading.anomaly">Anomalia GLM</span><b id="anomalyValue">-</b></div>
+            <div><span data-i18n="reading.p90">Soglia p90</span><b id="p90Value">-</b></div>
+            <div><span data-i18n="reading.p95">Soglia p95</span><b id="p95Value">-</b></div>
           </div>
-          <p class="caution">Un superamento modellato indica rischio termico. Non conferma una heatwave osservata senza un logger recente indipendente.</p>
+          <p class="caution" data-i18n="reading.caution">Un superamento modellato indica rischio termico. Non conferma una heatwave osservata senza un logger recente indipendente.</p>
         </aside>
       </div>
 
-      <div class="weather-row" id="weatherRow" aria-label="Contesto meteorologico"></div>
+      <div class="weather-row" id="weatherRow" aria-label="Contesto meteorologico" data-i18n-aria="weather.aria"></div>
     </section>
 
     <section class="section verification" id="verifica" aria-labelledby="verifyTitle">
       <div class="section-heading">
         <div>
-          <p class="eyebrow dark">Previsione, correzione e dato reale pubblico</p>
-          <h2 id="verifyTitle">La correzione si avvicina davvero?</h2>
-          <p class="section-intro">Verifica 2026 della temperatura dell’aria a Santa Gilla. Qui il riferimento è disponibile e il confronto è omogeneo.</p>
+          <p class="eyebrow dark" data-i18n="verify.eyebrow">Previsione, correzione e dato reale pubblico</p>
+          <h2 id="verifyTitle" data-i18n="verify.title">La correzione si avvicina davvero?</h2>
+          <p class="section-intro" data-i18n="verify.intro">Verifica 2026 della temperatura dell’aria a Santa Gilla. Qui il riferimento è disponibile e il confronto è omogeneo.</p>
         </div>
-        <label class="select-control"><span>Orizzonte</span><select id="leadSelect"><option value="1">+1 giorno</option><option value="3">+3 giorni</option><option value="5">+5 giorni</option><option value="7">+7 giorni</option></select></label>
+        <label class="select-control"><span data-i18n="verify.horizon">Orizzonte</span><select id="leadSelect"><option value="1" data-i18n="verify.day1">+1 giorno</option><option value="3" data-i18n="verify.day3">+3 giorni</option><option value="5" data-i18n="verify.day5">+5 giorni</option><option value="7" data-i18n="verify.day7">+7 giorni</option></select></label>
       </div>
 
       <div class="verdict" id="correctionVerdict"></div>
       <div class="metric-grid">
-        <article><span>RMSE originale</span><b id="rmseOriginal">-</b></article>
-        <article><span>RMSE corretto</span><b id="rmseCorrected">-</b></article>
-        <article><span>Variazione RMSE</span><b id="rmseChange">-</b></article>
-        <article><span>Giorni valutati</span><b id="nDays">-</b></article>
+        <article><span data-i18n="verify.rmseOriginal">RMSE originale</span><b id="rmseOriginal">-</b></article>
+        <article><span data-i18n="verify.rmseCorrected">RMSE corretto</span><b id="rmseCorrected">-</b></article>
+        <article><span data-i18n="verify.rmseChange">Variazione RMSE</span><b id="rmseChange">-</b></article>
+        <article><span data-i18n="verify.days">Giorni valutati</span><b id="nDays">-</b></article>
       </div>
       <article class="panel chart-panel air-panel">
         <div class="panel-heading">
-          <div><h3>Traiettoria osservata, originale e corretta</h3><p>Le tre serie usano lo stesso giorno valido.</p></div>
+          <div><h3 data-i18n="air.title">Traiettoria osservata, originale e corretta</h3><p data-i18n="air.subtitle">Le tre serie usano lo stesso giorno valido.</p></div>
           <div class="legend">
-            <span><i class="line actual"></i>Dato reale</span>
-            <span><i class="line original"></i>Originale</span>
-            <span><i class="line corrected"></i>Corretta</span>
+            <span><i class="line actual"></i><span data-i18n="air.actual">Dato reale</span></span>
+            <span><i class="line original"></i><span data-i18n="air.original">Originale</span></span>
+            <span><i class="line corrected"></i><span data-i18n="air.corrected">Corretta</span></span>
           </div>
         </div>
-        <div class="canvas-wrap tall"><canvas id="airChart" role="img" aria-label="Grafico della verifica delle previsioni"></canvas></div>
-        <div class="chart-foot"><span id="airDateRange"></span><span>I dati meteorologici di riferimento sono pubblici. La correzione resta sperimentale.</span></div>
+        <div class="canvas-wrap tall"><canvas id="airChart" role="img" aria-label="Grafico della verifica delle previsioni" data-i18n-aria="air.chartAria"></canvas></div>
+        <div class="chart-foot"><span id="airDateRange"></span><span data-i18n="air.foot">I dati meteorologici di riferimento sono pubblici. La correzione resta sperimentale.</span></div>
       </article>
     </section>
 
     <section class="section source-section" id="fonti" aria-labelledby="sourcesTitle">
-      <div class="section-heading"><div><p class="eyebrow dark">Tracciabilità</p><h2 id="sourcesTitle">Cosa usa questa previsione</h2></div></div>
+      <div class="section-heading"><div><p class="eyebrow dark" data-i18n="sources.eyebrow">Tracciabilità</p><h2 id="sourcesTitle" data-i18n="sources.title">Cosa usa questa previsione</h2></div></div>
       <div class="source-layout">
         <div class="source-list" id="sourceList"></div>
         <aside class="privacy-card">
-          <span class="lock" aria-hidden="true">●</span>
-          <h3>Confine privato</h3>
-          <p>Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.</p>
-          <ul>
-            <li>Solo risultati aggregati</li>
-            <li>Nessun login o database</li>
-            <li>Nessuna scrittura pubblica</li>
-            <li>Nessun identificativo di stazione</li>
-          </ul>
-          <a href="./DATA_POLICY.md">Leggi la policy dati</a>
+          <span class="privacy-badge" data-i18n="privacy.badge">PRIVATO</span>
+          <h3 data-i18n="privacy.title">Confine privato</h3>
+          <p data-i18n="privacy.text">Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.</p>
+          <div class="privacy-facts" aria-label="Garanzie di riservatezza" data-i18n-aria="privacy.factsAria">
+            <span data-i18n="privacy.fact1">Solo risultati aggregati</span>
+            <span data-i18n="privacy.fact2">Nessun login o database</span>
+            <span data-i18n="privacy.fact3">Nessuna scrittura pubblica</span>
+            <span data-i18n="privacy.fact4">Nessun identificativo di stazione</span>
+          </div>
+          <a href="./DATA_POLICY.md" data-i18n="privacy.policy">Leggi la policy dati</a>
         </aside>
       </div>
     </section>
   </main>
 
   <footer>
-    <div><b>Santa Gilla Forecast Lens</b><p>Prototipo scientifico operativo. Non adatto alla navigazione o ad allerta sanitaria.</p><small class="texture-credit">Texture visive adattate dagli asset Computational-Physics / MQ.</small></div>
-    <div class="footer-links"><a href="./README.md">Progetto</a><a href="./DATA_POLICY.md">Dati</a><a href="./NOTICE.md">Note</a><a href="./ASSET_PROVENANCE.md">Asset</a></div>
+    <div><b>Santa Gilla Forecast Lens</b><p data-i18n="footer.prototype">Prototipo scientifico operativo. Non adatto alla navigazione o ad allerta sanitaria.</p><small class="texture-credit" data-i18n="footer.texture">Texture visive adattate dagli asset Computational-Physics / MQ.</small></div>
+    <div class="footer-links"><a href="./README.md" data-i18n="footer.project">Progetto</a><a href="./DATA_POLICY.md" data-i18n="footer.data">Dati</a><a href="./NOTICE.md" data-i18n="footer.notes">Note</a><a href="./ASSET_PROVENANCE.md">Asset</a></div>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <noscript>Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
+  <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
   <script src="./app.js" defer></script>
 </body>

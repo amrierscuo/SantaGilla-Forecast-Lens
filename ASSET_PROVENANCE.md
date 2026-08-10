@@ -7,5 +7,8 @@ Il sistema di cornici materiche del sito deriva da asset locali del progetto Com
 | `assets/textures/quantum-ice.jpg` | `Args/Phy/MQ/img/texture_ghiaccio.png` | Cornici Copernicus, satellite e testata |
 | `assets/textures/quantum-metal.jpg` | `Args/Phy/MQ/boss/assets3d/tex_metal_2048.jpg` | Evidenza del forecast enhanced |
 | `assets/textures/quantum-marble.jpg` | `Args/Phy/MQ/boss/assets3d/Marble012_4K-JPG/Marble012_4K-JPG_Color.jpg` | Pannelli scientifici e contesto |
+| `assets/icons/*.svg` | [Lucide Icons](https://github.com/lucide-icons/lucide) | Icone meteorologiche vettoriali |
 
 Le copie pubbliche sono state ridimensionate e compresse per il web. Le texture restano confinate alle cornici e agli sfondi a bassa opacità, così grafici, valori e testi mantengono contrasto e leggibilità.
+
+Le icone Lucide sono distribuite localmente, senza CDN o tracciamento esterno. La licenza è inclusa in `assets/icons/LICENSE-LUCIDE.txt`.

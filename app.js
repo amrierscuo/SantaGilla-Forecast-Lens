@@ -4,30 +4,205 @@ const COLORS = { ours: "#d84a5f", cop: "#176ea6", sat: "#1aa3a3", actual: "#1736
 const $ = (selector) => document.querySelector(selector);
 let DATA;
 let selectedDate;
+let currentLang = "it";
+
+try {
+  currentLang = localStorage.getItem("sg-language") === "en" ? "en" : "it";
+} catch (_) {
+  currentLang = "it";
+}
+
+const TEXT = {
+  it: {
+    "meta.description": "Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.",
+    skip: "Vai al contenuto",
+    "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.verify": "Verifica", "nav.sources": "Fonti",
+    "language.label": "Lingua dell'interfaccia",
+    "hero.eyebrow": "Indicatore operativo scientifico", "hero.title": "Previsione lagunare e mare aperto, nello stesso quadro.",
+    "hero.lead": "Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.",
+    "hero.compare": "Confronta oggi", "hero.method": "Come leggere i dati",
+    "status.aria": "Stato del prodotto", "status.snapshot": "Snapshot verificato", "status.loading": "Caricamento",
+    "status.updated": "Aggiornato {date}", "status.area": "Area", "status.model": "Modello", "status.access": "Accesso",
+    "status.privacy": "Nessun dato osservativo privato è distribuito dal sito.",
+    "water.eyebrow": "Confronto termico giornaliero", "water.title": "Acqua modellata e contesto Copernicus",
+    "water.dateSelector": "Seleziona la data", "water.previous": "Data precedente", "water.date": "Data", "water.next": "Data successiva", "water.today": "Oggi",
+    "water.ourModel": "Nostro modello", "water.lagoon": "Acqua Santa Gilla", "water.rangeUnavailable": "Intervallo non disponibile",
+    "water.medModel": "Modello Mediterraneo", "water.surface": "Superficie, Golfo di Cagliari", "water.observation": "Osservazione L4",
+    "water.lastAvailable": "Ultimo dato disponibile", "water.public": "Pubblico", "water.dailyMinMax": "Min e max giornalieri",
+    "diff.aria": "Differenze calcolate", "diff.copGlm": "Copernicus meno GLM", "diff.satGlm": "Satellite meno GLM",
+    "diff.copSat": "Copernicus meno satellite", "diff.refresh": "Aggiorna dato pubblico", "diff.updating": "Aggiornamento",
+    "trajectory.title": "Traiettoria termica", "trajectory.subtitle": "Laguna modellata e superficie offshore non sono lo stesso target.",
+    "trajectory.legend": "Legenda", "trajectory.chartAria": "Grafico della traiettoria termica", "trajectory.tableAria": "Dati del grafico termico",
+    "trajectory.caption": "Valori della traiettoria termica", "trajectory.date": "Data",
+    "reading.eyebrow": "Lettura corretta", "reading.defaultTitle": "Confronto, non validazione diretta",
+    "reading.defaultText": "Il modello Copernicus non risolve l'interno della laguna. La differenza quantifica il contrasto tra la stima lagunare e il mare esterno.",
+    "reading.anomaly": "Anomalia GLM", "reading.p90": "Soglia p90", "reading.p95": "Soglia p95",
+    "reading.caution": "Un superamento modellato indica rischio termico. Non conferma una heatwave osservata senza un logger recente indipendente.",
+    "reading.high": "Rischio termico modellato elevato", "reading.risk": "Rischio termico modellato", "reading.below": "Condizione modellata sotto p90",
+    "weather.aria": "Contesto meteorologico", "weather.clear": "Sereno", "weather.partly": "Poco nuvoloso", "weather.cloudy": "Coperto",
+    "weather.fog": "Nebbia", "weather.drizzle": "Pioviggine", "weather.rain": "Pioggia", "weather.storm": "Temporale", "weather.variable": "Variabile",
+    "weather.maxWind": "Vento massimo", "weather.precipitation": "Precipitazione", "weather.uv": "Indice UV", "weather.sunshine": "Sole utile",
+    "weather.airRange": "{min}-{max} °C aria", "weather.precipDetail": "{mm} mm - {prob}%", "weather.hours": "{hours} ore",
+    "verify.eyebrow": "Previsione, correzione e dato reale pubblico", "verify.title": "La correzione si avvicina davvero?",
+    "verify.intro": "Verifica 2026 della temperatura dell'aria a Santa Gilla. Qui il riferimento è disponibile e il confronto è omogeneo.",
+    "verify.horizon": "Orizzonte", "verify.day1": "+1 giorno", "verify.day3": "+3 giorni", "verify.day5": "+5 giorni", "verify.day7": "+7 giorni",
+    "verify.rmseOriginal": "RMSE originale", "verify.rmseCorrected": "RMSE corretto", "verify.rmseChange": "Variazione RMSE", "verify.days": "Giorni valutati",
+    "verify.improved": "A +{lead} giorni la correzione riduce l'RMSE. È più vicina al dato reale del forecast originale.",
+    "verify.worse": "A +{lead} giorni il forecast originale è migliore. La correzione aumenta l'RMSE di {change}% e non viene promossa.",
+    "air.title": "Traiettoria osservata, originale e corretta", "air.subtitle": "Le tre serie usano lo stesso giorno valido.",
+    "air.actual": "Dato reale", "air.original": "Originale", "air.corrected": "Corretta", "air.chartAria": "Grafico della verifica delle previsioni",
+    "air.foot": "I dati meteorologici di riferimento sono pubblici. La correzione resta sperimentale.",
+    "sources.eyebrow": "Tracciabilità", "sources.title": "Cosa usa questa previsione", "sources.open": "Apri la fonte ufficiale ↗",
+    "privacy.badge": "PRIVATO", "privacy.title": "Confine privato",
+    "privacy.text": "Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.",
+    "privacy.factsAria": "Garanzie di riservatezza", "privacy.fact1": "Solo risultati aggregati", "privacy.fact2": "Nessun login o database",
+    "privacy.fact3": "Nessuna scrittura pubblica", "privacy.fact4": "Nessun identificativo di stazione", "privacy.policy": "Leggi la policy dati",
+    "footer.prototype": "Prototipo scientifico operativo. Non adatto alla navigazione o ad allerta sanitaria.",
+    "footer.texture": "Texture visive adattate dagli asset Computational-Physics / MQ.", "footer.project": "Progetto", "footer.data": "Dati", "footer.notes": "Note",
+    noscript: "Il tool richiede JavaScript per grafici e selezione delle date.",
+    "common.unavailable": "Non disponibile", "dynamic.range": "Intervallo 5-95%: {low}-{high} °C", "dynamic.l4": "Dato L4 del {date}",
+    "dynamic.noPrevious": "Nessun dato precedente disponibile", "dynamic.proxyRange": "Intervallo {min}-{max} °C", "dynamic.noMinMax": "Min e max non disponibili",
+    "dynamic.aboveP95": "sopra p95", "dynamic.aboveP90": "sopra p90", "dynamic.belowP90": "sotto p90",
+    "dynamic.truth": "{date} - GLM lagunare {thermal}. Copernicus e satellite descrivono il punto offshore e non sostituiscono un logger interno.",
+    "dynamic.spatial": "Il mare esterno modellato è {delta} °C {direction} della stima lagunare. È un contrasto spaziale, non un errore del GLM.",
+    "dynamic.warmer": "più caldo", "dynamic.cooler": "più freddo", "dynamic.noCop": "Copernicus non è disponibile per questa data. La stima lagunare resta visualizzata con le sue soglie.",
+    "dynamic.updated": "{count} serie pubbliche aggiornate per {date}.", "dynamic.liveError": "La fonte live non risponde. Rimane visibile lo snapshot verificato.",
+    "dynamic.dataError": "Il dataset pubblico non è disponibile. Ricaricare la pagina o consultare il manifest."
+  },
+  en: {
+    "meta.description": "Operational comparison of the Santa Gilla modelled thermal forecast, Copernicus Marine and public weather data.",
+    skip: "Skip to content",
+    "nav.label": "Main navigation", "nav.water": "Water", "nav.verify": "Verification", "nav.sources": "Sources",
+    "language.label": "Interface language",
+    "hero.eyebrow": "Scientific operational indicator", "hero.title": "Lagoon forecast and open sea, in one view.",
+    "hero.lead": "Our enhanced model remains in focus. Copernicus Marine, satellite and public weather data provide the context needed to read differences, trajectories and limitations.",
+    "hero.compare": "Compare today", "hero.method": "How to read the data",
+    "status.aria": "Product status", "status.snapshot": "Verified snapshot", "status.loading": "Loading",
+    "status.updated": "Updated {date}", "status.area": "Area", "status.model": "Model", "status.access": "Access",
+    "status.privacy": "No private observational data are distributed by this site.",
+    "water.eyebrow": "Daily thermal comparison", "water.title": "Modelled water and Copernicus context",
+    "water.dateSelector": "Select date", "water.previous": "Previous date", "water.date": "Date", "water.next": "Next date", "water.today": "Today",
+    "water.ourModel": "Our model", "water.lagoon": "Santa Gilla water", "water.rangeUnavailable": "Range unavailable",
+    "water.medModel": "Mediterranean model", "water.surface": "Surface, Gulf of Cagliari", "water.observation": "L4 observation",
+    "water.lastAvailable": "Latest available value", "water.public": "Public", "water.dailyMinMax": "Daily minimum and maximum",
+    "diff.aria": "Calculated differences", "diff.copGlm": "Copernicus minus GLM", "diff.satGlm": "Satellite minus GLM",
+    "diff.copSat": "Copernicus minus satellite", "diff.refresh": "Refresh public data", "diff.updating": "Updating",
+    "trajectory.title": "Thermal trajectory", "trajectory.subtitle": "The modelled lagoon and offshore surface are not the same target.",
+    "trajectory.legend": "Legend", "trajectory.chartAria": "Thermal trajectory chart", "trajectory.tableAria": "Thermal chart data",
+    "trajectory.caption": "Thermal trajectory values", "trajectory.date": "Date",
+    "reading.eyebrow": "Correct interpretation", "reading.defaultTitle": "Comparison, not direct validation",
+    "reading.defaultText": "The Copernicus model does not resolve the inside of the lagoon. The difference quantifies the contrast between the lagoon estimate and the open sea.",
+    "reading.anomaly": "GLM anomaly", "reading.p90": "p90 threshold", "reading.p95": "p95 threshold",
+    "reading.caution": "A modelled exceedance indicates thermal risk. It does not confirm an observed heatwave without a recent independent logger.",
+    "reading.high": "High modelled thermal risk", "reading.risk": "Modelled thermal risk", "reading.below": "Modelled condition below p90",
+    "weather.aria": "Weather context", "weather.clear": "Clear", "weather.partly": "Partly cloudy", "weather.cloudy": "Overcast",
+    "weather.fog": "Fog", "weather.drizzle": "Drizzle", "weather.rain": "Rain", "weather.storm": "Thunderstorm", "weather.variable": "Variable",
+    "weather.maxWind": "Maximum wind", "weather.precipitation": "Precipitation", "weather.uv": "UV index", "weather.sunshine": "Useful sunshine",
+    "weather.airRange": "{min}-{max} °C air", "weather.precipDetail": "{mm} mm - {prob}%", "weather.hours": "{hours} hours",
+    "verify.eyebrow": "Forecast, correction and public observed value", "verify.title": "Does the correction really get closer?",
+    "verify.intro": "2026 verification of air temperature at Santa Gilla. Here a reference is available and the comparison is homogeneous.",
+    "verify.horizon": "Horizon", "verify.day1": "+1 day", "verify.day3": "+3 days", "verify.day5": "+5 days", "verify.day7": "+7 days",
+    "verify.rmseOriginal": "Original RMSE", "verify.rmseCorrected": "Corrected RMSE", "verify.rmseChange": "RMSE change", "verify.days": "Evaluated days",
+    "verify.improved": "At +{lead} days, the correction reduces RMSE. It is closer to the observed value than the original forecast.",
+    "verify.worse": "At +{lead} days, the original forecast performs better. The correction increases RMSE by {change}% and is not promoted.",
+    "air.title": "Observed, original and corrected trajectory", "air.subtitle": "All three series use the same valid day.",
+    "air.actual": "Observed", "air.original": "Original", "air.corrected": "Corrected", "air.chartAria": "Forecast verification chart",
+    "air.foot": "Reference weather data are public. The correction remains experimental.",
+    "sources.eyebrow": "Traceability", "sources.title": "What this forecast uses", "sources.open": "Open official source ↗",
+    "privacy.badge": "PRIVATE", "privacy.title": "Private boundary",
+    "privacy.text": "Original scientific spreadsheets, row-level observations, coefficients and the trained file are neither included nor required by this site.",
+    "privacy.factsAria": "Privacy guarantees", "privacy.fact1": "Aggregated results only", "privacy.fact2": "No login or database",
+    "privacy.fact3": "No public write access", "privacy.fact4": "No station identifier", "privacy.policy": "Read the data policy",
+    "footer.prototype": "Operational scientific prototype. Not suitable for navigation or public-health alerts.",
+    "footer.texture": "Visual textures adapted from Computational-Physics / MQ assets.", "footer.project": "Project", "footer.data": "Data", "footer.notes": "Notes",
+    noscript: "This tool requires JavaScript for charts and date selection.",
+    "common.unavailable": "Unavailable", "dynamic.range": "5-95% range: {low}-{high} °C", "dynamic.l4": "L4 value for {date}",
+    "dynamic.noPrevious": "No earlier value available", "dynamic.proxyRange": "Range {min}-{max} °C", "dynamic.noMinMax": "Minimum and maximum unavailable",
+    "dynamic.aboveP95": "above p95", "dynamic.aboveP90": "above p90", "dynamic.belowP90": "below p90",
+    "dynamic.truth": "{date} - lagoon GLM {thermal}. Copernicus and satellite describe the offshore point and do not replace an internal logger.",
+    "dynamic.spatial": "The modelled open sea is {delta} °C {direction} than the lagoon estimate. This is a spatial contrast, not a GLM error.",
+    "dynamic.warmer": "warmer", "dynamic.cooler": "cooler", "dynamic.noCop": "Copernicus is unavailable for this date. The lagoon estimate remains visible with its thresholds.",
+    "dynamic.updated": "{count} public series updated for {date}.", "dynamic.liveError": "The live source is not responding. The verified snapshot remains visible.",
+    "dynamic.dataError": "The public dataset is unavailable. Reload the page or consult the manifest."
+  }
+};
+
+const SOURCE_ROLE_EN = {
+  "Modello marino offshore": "Offshore marine model",
+  "SST satellitare offshore": "Offshore satellite SST",
+  "Forcing meteorologico operativo pubblico": "Public operational weather forcing",
+  "Proxy marino pubblico di confronto": "Public marine comparison proxy"
+};
+
+function t(key, variables = {}) {
+  let value = TEXT[currentLang][key] ?? TEXT.it[key] ?? key;
+  Object.entries(variables).forEach(([name, replacement]) => {
+    value = value.split(`{${name}}`).join(String(replacement));
+  });
+  return value;
+}
+
+function locale() {
+  return currentLang === "en" ? "en-GB" : "it-IT";
+}
+
+function formatNumber(value, digits = 1) {
+  return new Intl.NumberFormat(locale(), { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(Number(value));
+}
 
 function number(value, digits = 1) {
-  return Number.isFinite(Number(value)) ? `${Number(value).toFixed(digits)} °C` : "Non disponibile";
+  return Number.isFinite(Number(value)) ? `${formatNumber(value, digits)} °C` : t("common.unavailable");
 }
 
 function signed(value, digits = 2) {
-  return Number.isFinite(Number(value)) ? `${Number(value) >= 0 ? "+" : ""}${Number(value).toFixed(digits)} °C` : "-";
+  return Number.isFinite(Number(value)) ? `${Number(value) >= 0 ? "+" : ""}${formatNumber(value, digits)} °C` : "-";
 }
 
 function localDate(iso) {
   if (!iso) return "-";
-  return new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+  return new Intl.DateTimeFormat(locale(), { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+}
+
+function setGeneratedDate() {
+  if (!DATA) return;
+  const date = new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(DATA.meta.generated_at));
+  $("#generatedDate").textContent = t("status.updated", { date });
+}
+
+function applyLanguage(lang, persist = true) {
+  currentLang = lang === "en" ? "en" : "it";
+  document.documentElement.lang = currentLang;
+  if (persist) {
+    try { localStorage.setItem("sg-language", currentLang); } catch (_) { /* preference remains session-only */ }
+  }
+  document.querySelectorAll("[data-i18n]").forEach((node) => { node.textContent = t(node.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-aria]").forEach((node) => { node.setAttribute("aria-label", t(node.dataset.i18nAria)); });
+  document.querySelectorAll("[data-i18n-content]").forEach((node) => { node.setAttribute("content", t(node.dataset.i18nContent)); });
+  document.querySelectorAll("[data-lang]").forEach((button) => { button.setAttribute("aria-pressed", String(button.dataset.lang === currentLang)); });
+  if (DATA) {
+    setGeneratedDate();
+    renderSources();
+    updateDay();
+    updateAirVerification();
+  }
+}
+
+function bindLanguageSwitch() {
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+  });
 }
 
 function weather(code) {
   const c = Number(code);
-  if (c === 0) return ["☀️", "Sereno"];
-  if ([1, 2].includes(c)) return ["🌤️", "Poco nuvoloso"];
-  if (c === 3) return ["☁️", "Coperto"];
-  if ([45, 48].includes(c)) return ["🌫️", "Nebbia"];
-  if ([51, 53, 55, 56, 57].includes(c)) return ["🌦️", "Pioviggine"];
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(c)) return ["🌧️", "Pioggia"];
-  if ([95, 96, 99].includes(c)) return ["⛈️", "Temporale"];
-  return ["🌡️", "Variabile"];
+  if (c === 0) return ["sun", "weather.clear"];
+  if ([1, 2].includes(c)) return ["cloud-sun", "weather.partly"];
+  if (c === 3) return ["cloud", "weather.cloudy"];
+  if ([45, 48].includes(c)) return ["cloud-fog", "weather.fog"];
+  if ([51, 53, 55, 56, 57].includes(c)) return ["cloud-drizzle", "weather.drizzle"];
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(c)) return ["cloud-rain", "weather.rain"];
+  if ([95, 96, 99].includes(c)) return ["cloud-lightning", "weather.storm"];
+  return ["thermometer-sun", "weather.variable"];
 }
 
 function byDate(list, date, key = "date") {
@@ -63,12 +238,12 @@ function updateDay() {
   const dayWeather = byDate(DATA.weather, selectedDate);
 
   $("#glmValue").textContent = number(water?.glm_c, 2);
-  $("#glmRange").textContent = water ? `Intervallo 5-95%: ${water.q05_c.toFixed(2)}-${water.q95_c.toFixed(2)} °C` : "Intervallo non disponibile";
+  $("#glmRange").textContent = water ? t("dynamic.range", { low: formatNumber(water.q05_c, 2), high: formatNumber(water.q95_c, 2) }) : t("water.rangeUnavailable");
   $("#copValue").textContent = number(cop?.value_c, 2);
   $("#satValue").textContent = number(satellite?.value_c, 2);
-  $("#satDate").textContent = satellite ? `Dato L4 del ${localDate(satellite.date)}` : "Nessun dato precedente disponibile";
+  $("#satDate").textContent = satellite ? t("dynamic.l4", { date: localDate(satellite.date) }) : t("dynamic.noPrevious");
   $("#proxyValue").textContent = number(proxy?.mean_c, 2);
-  $("#proxyRange").textContent = proxy ? `Intervallo ${proxy.min_c.toFixed(1)}-${proxy.max_c.toFixed(1)} °C` : "Min e max non disponibili";
+  $("#proxyRange").textContent = proxy ? t("dynamic.proxyRange", { min: formatNumber(proxy.min_c, 1), max: formatNumber(proxy.max_c, 1) }) : t("dynamic.noMinMax");
 
   $("#diffCopGlm").textContent = signed(cop && water ? cop.value_c - water.glm_c : null);
   $("#diffSatGlm").textContent = signed(satellite && water ? satellite.value_c - water.glm_c : null);
@@ -77,12 +252,12 @@ function updateDay() {
   $("#p90Value").textContent = number(water?.p90_c, 2);
   $("#p95Value").textContent = number(water?.p95_c, 2);
 
-  const thermal = water?.above_p95 ? "sopra p95" : water?.above_p90 ? "sopra p90" : "sotto p90";
-  $("#truthBanner").textContent = `${localDate(selectedDate)} - GLM lagunare ${thermal}. Copernicus e satellite descrivono il punto offshore e non sostituiscono un logger interno.`;
-  $("#readingTitle").textContent = water?.above_p95 ? "Rischio termico modellato elevato" : water?.above_p90 ? "Rischio termico modellato" : "Condizione modellata sotto p90";
+  const thermal = water?.above_p95 ? t("dynamic.aboveP95") : water?.above_p90 ? t("dynamic.aboveP90") : t("dynamic.belowP90");
+  $("#truthBanner").textContent = t("dynamic.truth", { date: localDate(selectedDate), thermal });
+  $("#readingTitle").textContent = water?.above_p95 ? t("reading.high") : water?.above_p90 ? t("reading.risk") : t("reading.below");
   $("#readingText").textContent = cop && water
-    ? `Il mare esterno modellato è ${Math.abs(cop.value_c - water.glm_c).toFixed(2)} °C ${cop.value_c >= water.glm_c ? "più caldo" : "più freddo"} della stima lagunare. È un contrasto spaziale, non un errore del GLM.`
-    : "Copernicus non è disponibile per questa data. La stima lagunare resta visualizzata con le sue soglie.";
+    ? t("dynamic.spatial", { delta: formatNumber(Math.abs(cop.value_c - water.glm_c), 2), direction: cop.value_c >= water.glm_c ? t("dynamic.warmer") : t("dynamic.cooler") })
+    : t("dynamic.noCop");
 
   renderWeather(dayWeather);
   drawWaterChart();
@@ -90,16 +265,17 @@ function updateDay() {
 }
 
 function renderWeather(row) {
-  const [icon, label] = weather(row?.weather_code);
+  const [conditionIcon, conditionKey] = weather(row?.weather_code);
   const sunshine = row?.sunshine_duration ? row.sunshine_duration / 3600 : null;
+  const unavailable = t("common.unavailable");
   const items = [
-    [icon, label, row ? `${row.temperature_2m_min.toFixed(1)}-${row.temperature_2m_max.toFixed(1)} °C aria` : "Non disponibile"],
-    ["💨", "Vento massimo", row ? `${row.wind_speed_10m_max.toFixed(1)} kn` : "Non disponibile"],
-    ["🌧️", "Precipitazione", row ? `${row.precipitation_sum.toFixed(1)} mm - ${row.precipitation_probability_max.toFixed(0)}%` : "Non disponibile"],
-    ["🔆", "Indice UV", row ? row.uv_index_max.toFixed(1) : "Non disponibile"],
-    ["🌅", "Sole utile", sunshine !== null ? `${sunshine.toFixed(1)} ore` : "Non disponibile"],
+    { icon: conditionIcon, tone: "condition", title: t(conditionKey), detail: row ? t("weather.airRange", { min: formatNumber(row.temperature_2m_min, 1), max: formatNumber(row.temperature_2m_max, 1) }) : unavailable },
+    { icon: "wind", tone: "wind", title: t("weather.maxWind"), detail: row ? `${formatNumber(row.wind_speed_10m_max, 1)} kn` : unavailable },
+    { icon: "umbrella", tone: "rain", title: t("weather.precipitation"), detail: row ? t("weather.precipDetail", { mm: formatNumber(row.precipitation_sum, 1), prob: formatNumber(row.precipitation_probability_max, 0) }) : unavailable },
+    { icon: "sun-medium", tone: "uv", title: t("weather.uv"), detail: row ? formatNumber(row.uv_index_max, 1) : unavailable },
+    { icon: "sunrise", tone: "sunshine", title: t("weather.sunshine"), detail: sunshine !== null ? t("weather.hours", { hours: formatNumber(sunshine, 1) }) : unavailable }
   ];
-  $("#weatherRow").innerHTML = items.map(([i, title, detail]) => `<article class="weather-card"><span class="weather-icon" aria-hidden="true">${i}</span><b>${title}</b><span>${detail}</span></article>`).join("");
+  $("#weatherRow").innerHTML = items.map((item) => `<article class="weather-card"><span class="weather-icon-shell ${item.tone}" aria-hidden="true"><img src="./assets/icons/${item.icon}.svg" alt="" width="28" height="28"></span><b>${item.title}</b><span class="weather-detail">${item.detail}</span></article>`).join("");
 }
 
 function canvasContext(canvas) {
@@ -132,7 +308,7 @@ function chartFrame(canvas, values, labels) {
     ctx.beginPath(); ctx.moveTo(pad.left, yy); ctx.lineTo(width - pad.right, yy); ctx.stroke();
     ctx.fillStyle = COLORS.muted;
     ctx.textAlign = "right";
-    ctx.fillText(`${value.toFixed(1)}°`, pad.left - 8, yy + 4);
+    ctx.fillText(`${formatNumber(value, 1)}°`, pad.left - 8, yy + 4);
   }
   const labelStep = Math.max(1, Math.ceil(labels.length / 6));
   labels.forEach((label, i) => {
@@ -183,9 +359,9 @@ function renderWaterTable() {
   const rows = DATA.water_forecast.map((row) => {
     const cop = byDate(DATA.copernicus.model_daily, row.date);
     const sat = byDate(DATA.copernicus.satellite_daily, row.date);
-    return `<tr><td>${row.date}</td><td>${row.glm_c}</td><td>${cop?.value_c ?? ""}</td><td>${sat?.value_c ?? ""}</td></tr>`;
+    return `<tr><td>${row.date}</td><td>${formatNumber(row.glm_c, 3)}</td><td>${cop ? formatNumber(cop.value_c, 3) : ""}</td><td>${sat ? formatNumber(sat.value_c, 3) : ""}</td></tr>`;
   }).join("");
-  $("#waterTable").innerHTML = `<table><caption>Valori della traiettoria termica</caption><thead><tr><th>Data</th><th>GLM</th><th>Copernicus</th><th>Satellite</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $("#waterTable").innerHTML = `<table><caption>${t("trajectory.caption")}</caption><thead><tr><th>${t("trajectory.date")}</th><th>GLM</th><th>Copernicus</th><th>Satellite</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function updateAirVerification() {
@@ -194,14 +370,14 @@ function updateAirVerification() {
   const rows = DATA.air_verification.daily.filter((row) => row.lead_days === lead).sort((a, b) => a.date.localeCompare(b.date));
   $("#rmseOriginal").textContent = number(metric.rmse_original_c, 3);
   $("#rmseCorrected").textContent = number(metric.rmse_corrected_c, 3);
-  $("#rmseChange").textContent = `${metric.rmse_change_pct > 0 ? "+" : ""}${metric.rmse_change_pct.toFixed(1)}%`;
-  $("#nDays").textContent = metric.n_days.toLocaleString("it-IT");
+  $("#rmseChange").textContent = `${metric.rmse_change_pct > 0 ? "+" : ""}${formatNumber(metric.rmse_change_pct, 1)}%`;
+  $("#nDays").textContent = new Intl.NumberFormat(locale()).format(metric.n_days);
   const improved = metric.rmse_corrected_c < metric.rmse_original_c;
   const verdict = $("#correctionVerdict");
   verdict.className = `verdict ${improved ? "positive" : "negative"}`;
   verdict.textContent = improved
-    ? `A +${lead} giorni la correzione riduce l’RMSE. È più vicina al dato reale del forecast originale.`
-    : `A +${lead} giorni il forecast originale è migliore. La correzione aumenta l’RMSE di ${Math.abs(metric.rmse_change_pct).toFixed(1)}% e non viene promossa.`;
+    ? t("verify.improved", { lead })
+    : t("verify.worse", { lead, change: formatNumber(Math.abs(metric.rmse_change_pct), 1) });
   $("#airDateRange").textContent = `${localDate(rows[0]?.date)} - ${localDate(rows.at(-1)?.date)}`;
   drawAirChart(rows);
 }
@@ -218,7 +394,10 @@ function drawAirChart(rows) {
 }
 
 function renderSources() {
-  $("#sourceList").innerHTML = DATA.sources.map((source) => `<a class="source-item" href="${source.url}" target="_blank" rel="noopener noreferrer"><small>${source.role}</small><b>${source.label}</b><span>Apri la fonte ufficiale ↗</span></a>`).join("");
+  $("#sourceList").innerHTML = DATA.sources.map((source) => {
+    const role = currentLang === "en" ? (SOURCE_ROLE_EN[source.role] ?? source.role) : source.role;
+    return `<a class="source-item" href="${source.url}" target="_blank" rel="noopener noreferrer"><small>${role}</small><b>${source.label}</b><span>${t("sources.open")}</span></a>`;
+  }).join("");
 }
 
 function copernicusUrl(date, satellite = false) {
@@ -235,13 +414,13 @@ async function readPublicPoint(date, satellite = false) {
   const documentCopy = new DOMParser().parseFromString(await response.text(), "text/html");
   const cells = [...documentCopy.querySelectorAll("table tr:last-child td")];
   const raw = Number(cells[4]?.textContent);
-  if (!Number.isFinite(raw)) throw new Error("Dato non disponibile");
+  if (!Number.isFinite(raw)) throw new Error("Public value unavailable");
   return satellite ? raw - 273.15 : raw;
 }
 
 async function refreshPublicData() {
   const button = $("#refreshCopernicus");
-  button.disabled = true; button.textContent = "Aggiornamento";
+  button.disabled = true; button.textContent = t("diff.updating");
   const results = await Promise.allSettled([readPublicPoint(selectedDate, false), readPublicPoint(selectedDate, true)]);
   let updated = 0;
   if (results[0].status === "fulfilled") {
@@ -254,9 +433,9 @@ async function refreshPublicData() {
     if (existing) existing.value_c = results[1].value; else DATA.copernicus.satellite_daily.push({ date: selectedDate, value_c: results[1].value });
     updated += 1;
   }
-  button.disabled = false; button.textContent = "Aggiorna dato pubblico";
+  button.disabled = false; button.textContent = t("diff.refresh");
   updateDay();
-  toast(updated ? `${updated} serie pubbliche aggiornate per ${localDate(selectedDate)}.` : "La fonte live non risponde. Rimane visibile lo snapshot verificato.");
+  toast(updated ? t("dynamic.updated", { count: updated, date: localDate(selectedDate) }) : t("dynamic.liveError"));
 }
 
 function bindEvents() {
@@ -273,6 +452,8 @@ function bindEvents() {
 }
 
 async function init() {
+  bindLanguageSwitch();
+  applyLanguage(currentLang, false);
   try {
     if (window.__SANTA_GILLA_PUBLIC_DATA__) {
       DATA = window.__SANTA_GILLA_PUBLIC_DATA__;
@@ -281,10 +462,13 @@ async function init() {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       DATA = await response.json();
     }
-    $("#generatedDate").textContent = `Aggiornato ${new Intl.DateTimeFormat("it-IT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(DATA.meta.generated_at))}`;
-    renderSources(); bindEvents(); setDate(DATA.meta.reference_date); updateAirVerification();
+    setGeneratedDate();
+    renderSources();
+    bindEvents();
+    setDate(DATA.meta.reference_date);
+    updateAirVerification();
   } catch (error) {
-    $("#truthBanner").textContent = "Il dataset pubblico non è disponibile. Ricaricare la pagina o consultare il manifest.";
+    $("#truthBanner").textContent = t("dynamic.dataError");
     console.error(error);
   }
 }
