@@ -1,0 +1,8 @@
+{
+  "file": "forecast_public.json",
+  "bytes": 145288,
+  "sha256": "d17200275adf9d67ee7c5f6a3247d0e09ec42afe014fefea7eb20fc382a645bf",
+  "water_forecast_rows": 18,
+  "air_verification_rows": 876,
+  "contains_private_rows": false
+}
