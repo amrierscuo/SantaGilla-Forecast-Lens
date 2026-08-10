@@ -1131,7 +1131,7 @@ function drawTotalHistoryChart() {
   const lastYear = Number(rows.at(-1).date.slice(0, 4));
   const years = [firstYear];
   for (let year = Math.ceil(firstYear / 5) * 5; year <= lastYear; year += 5) years.push(year);
-  if (years.at(-1) !== lastYear) years.push(lastYear);
+  if (years.at(-1) !== lastYear && lastYear - years.at(-1) >= 3) years.push(lastYear);
   [...new Set(years)].forEach((year) => {
     const xx = x(new Date(`${year}-01-01T12:00:00Z`).getTime());
     ctx.strokeStyle = "rgba(220,230,225,.62)";
