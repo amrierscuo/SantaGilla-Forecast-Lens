@@ -1,0 +1,24 @@
+# Private research materials must never enter this repository.
+*.xlsx
+*.xls
+*.xlsm
+*.ipynb
+*.joblib
+*.pkl
+*.pickle
+*.parquet
+*.feather
+*.nc
+*.zarr
+*.zip
+*.7z
+*.rar
+inputs/
+private/
+raw/
+cache/
+node_modules/
+.env
+.env.*
+__pycache__/
+*.pyc
