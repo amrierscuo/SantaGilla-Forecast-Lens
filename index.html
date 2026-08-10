@@ -20,7 +20,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
-  <header class="hero">
+  <header class="hero compact-hero" id="top">
     <nav class="nav" aria-label="Navigazione principale" data-i18n-aria="nav.label">
       <a class="brand" href="#top" aria-label="Santa Gilla Forecast Lens">
         <span class="brand-mark" aria-hidden="true">SG</span>
@@ -38,27 +38,6 @@
         </div>
       </div>
     </nav>
-    <div class="hero-grid" id="top">
-      <div class="hero-copy">
-        <p class="eyebrow" data-i18n="hero.eyebrow">Indicatore operativo scientifico</p>
-        <h1 data-i18n="hero.title">Previsione lagunare e mare aperto, nello stesso quadro.</h1>
-        <p class="hero-lead" data-i18n="hero.lead">Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#acqua" data-i18n="hero.compare">Confronta oggi</a>
-          <a class="button ghost" href="#metodo" data-i18n="hero.method">Come leggere i dati</a>
-        </div>
-      </div>
-      <aside class="hero-status" aria-label="Stato del prodotto" data-i18n-aria="status.aria">
-        <div class="status-line"><span class="pulse" aria-hidden="true"></span><b data-i18n="status.snapshot">Snapshot verificato</b></div>
-        <div class="status-date" id="generatedDate" data-i18n="status.loading">Caricamento</div>
-        <dl>
-          <div><dt data-i18n="status.area">Area</dt><dd>Santa Gilla</dd></div>
-          <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01</dd></div>
-          <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
-        </dl>
-        <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
-      </aside>
-    </div>
   </header>
 
   <main id="main">
@@ -66,7 +45,7 @@
       <div class="section-heading">
         <div>
           <p class="eyebrow dark" data-i18n="water.eyebrow">Confronto termico giornaliero</p>
-          <h2 id="waterTitle" data-i18n="water.title">Acqua modellata e contesto Copernicus</h2>
+          <h1 class="tool-title" id="waterTitle" data-i18n="water.title">Acqua modellata e contesto Copernicus</h1>
         </div>
         <div class="date-controls" aria-label="Seleziona la data" data-i18n-aria="water.dateSelector">
           <button id="prevDate" class="icon-button" type="button" aria-label="Data precedente" data-i18n-aria="water.previous">←</button>
@@ -189,6 +168,30 @@
           <a href="./DATA_POLICY.md" data-i18n="privacy.policy">Leggi la policy dati</a>
         </aside>
       </div>
+    </section>
+
+    <section class="section technical-section" aria-labelledby="technicalTitle">
+      <aside class="technical-info">
+        <div class="technical-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Indicatore operativo scientifico</p>
+          <h2 id="technicalTitle" data-i18n="hero.title">Previsione lagunare e mare aperto, nello stesso quadro.</h2>
+          <p class="technical-lead" data-i18n="hero.lead">Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#acqua" data-i18n="hero.compare">Confronta oggi</a>
+            <a class="button ghost" href="#metodo" data-i18n="hero.method">Come leggere i dati</a>
+          </div>
+        </div>
+        <div class="hero-status technical-status" aria-label="Stato del prodotto" data-i18n-aria="status.aria">
+          <div class="status-line"><span class="pulse" aria-hidden="true"></span><b data-i18n="status.snapshot">Snapshot verificato</b></div>
+          <div class="status-date" id="generatedDate" data-i18n="status.loading">Caricamento</div>
+          <dl>
+            <div><dt data-i18n="status.area">Area</dt><dd>Santa Gilla</dd></div>
+            <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01</dd></div>
+            <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
+          </dl>
+          <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
+        </div>
+      </aside>
     </section>
   </main>
 
