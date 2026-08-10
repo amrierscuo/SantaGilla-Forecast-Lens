@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-total-mobile">
+  <link rel="stylesheet" href="./styles.css?v=20260810-oled-compact">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -34,6 +34,10 @@
           <a href="#statistiche" data-i18n="nav.stats">Statistiche</a>
           <a href="#fonti" data-i18n="nav.sources">Fonti</a>
         </div>
+        <button class="density-toggle" id="densityToggle" type="button" aria-pressed="false" aria-label="Attiva modalità OLED compatta">
+          <span class="density-glyph" aria-hidden="true">▦</span>
+          <span class="density-copy"><b id="densityLabel">OLED</b><small id="densityState">Compatta</small></span>
+        </button>
         <div class="language-switch" role="group" aria-label="Lingua" data-i18n-aria="language.label">
           <button type="button" data-lang="it" aria-pressed="true" aria-label="Italiano">IT</button>
           <button type="button" data-lang="en" aria-pressed="false" aria-label="English">EN</button>
@@ -309,6 +313,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-total-history" defer></script>
+  <script src="./app.js?v=20260810-oled-compact" defer></script>
 </body>
 </html>

@@ -5,14 +5,17 @@ const $ = (selector) => document.querySelector(selector);
 let DATA;
 let selectedDate;
 let currentLang = "it";
+let compactMode = false;
 let clockTimer;
 let totalSeriesCache;
 let totalPointerBound = false;
 
 try {
   currentLang = localStorage.getItem("sg-language") === "en" ? "en" : "it";
+  compactMode = localStorage.getItem("sg-density") === "compact";
 } catch (_) {
   currentLang = "it";
+  compactMode = false;
 }
 
 const TEXT = {
@@ -20,7 +23,7 @@ const TEXT = {
     "meta.description": "Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.",
     skip: "Vai al contenuto",
     "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.multimodel": "Multimodello", "nav.verify": "Verifica", "nav.stats": "Statistiche", "nav.sources": "Fonti",
-    "language.label": "Lingua dell'interfaccia",
+    "language.label": "Lingua dell'interfaccia", "density.compact": "Compatta", "density.standard": "Standard", "density.enableCompact": "Attiva modalità OLED compatta", "density.enableStandard": "Torna alla modalità standard",
     "hero.eyebrow": "Indicatore operativo scientifico", "hero.title": "Previsione lagunare e mare aperto, nello stesso quadro.",
     "hero.lead": "Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.",
     "hero.compare": "Confronta oggi", "hero.method": "Come leggere i dati",
@@ -144,7 +147,7 @@ const TEXT = {
     "meta.description": "Operational comparison of the Santa Gilla modelled thermal forecast, Copernicus Marine and public weather data.",
     skip: "Skip to content",
     "nav.label": "Main navigation", "nav.water": "Water", "nav.multimodel": "Multimodel", "nav.verify": "Verification", "nav.stats": "Statistics", "nav.sources": "Sources",
-    "language.label": "Interface language",
+    "language.label": "Interface language", "density.compact": "Compact", "density.standard": "Standard", "density.enableCompact": "Enable compact OLED mode", "density.enableStandard": "Return to standard mode",
     "hero.eyebrow": "Scientific operational indicator", "hero.title": "Lagoon forecast and open sea, in one view.",
     "hero.lead": "Our enhanced model remains in focus. Copernicus Marine, satellite and public weather data provide the context needed to read differences, trajectories and limitations.",
     "hero.compare": "Compare today", "hero.method": "How to read the data",
@@ -401,6 +404,7 @@ function applyLanguage(lang, persist = true) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => { node.setAttribute("aria-label", t(node.dataset.i18nAria)); });
   document.querySelectorAll("[data-i18n-content]").forEach((node) => { node.setAttribute("content", t(node.dataset.i18nContent)); });
   document.querySelectorAll("[data-lang]").forEach((button) => { button.setAttribute("aria-pressed", String(button.dataset.lang === currentLang)); });
+  updateDensityControl();
   updateClock();
   if (DATA) {
     setGeneratedDate();
@@ -418,6 +422,52 @@ function bindLanguageSwitch() {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     button.addEventListener("click", () => applyLanguage(button.dataset.lang));
   });
+}
+
+function updateDensityControl() {
+  const button = $("#densityToggle");
+  if (!button) return;
+  button.setAttribute("aria-pressed", String(compactMode));
+  $("#densityLabel").textContent = compactMode ? "STD" : "OLED";
+  $("#densityState").textContent = t(compactMode ? "density.standard" : "density.compact");
+  button.setAttribute("aria-label", t(compactMode ? "density.enableStandard" : "density.enableCompact"));
+}
+
+function updateChartPalette() {
+  Object.assign(COLORS, compactMode ? {
+    ours: "#ff334d", glm: "#eaff00", direct: "#ffe600", recursive: "#39ff88",
+    cop: "#00c8ff", sat: "#00ffb7", actual: "#f1fff8", corrected: "#ff334d",
+    original: "#00c8ff", grid: "#18372f", muted: "#86aa9e"
+  } : {
+    ours: "#d84a5f", glm: "#76535b", direct: "#d99a35", recursive: "#24805f",
+    cop: "#176ea6", sat: "#1aa3a3", actual: "#173631", corrected: "#d84a5f",
+    original: "#176ea6", grid: "#dce6e1", muted: "#6b7c76"
+  });
+}
+
+function redrawAllCharts() {
+  if (!DATA) return;
+  drawWaterChart();
+  drawSkillChart();
+  updateAirVerification();
+  drawTotalHistoryChart();
+}
+
+function applyDensity(compact, persist = true) {
+  compactMode = Boolean(compact);
+  document.body.classList.toggle("oled-compact", compactMode);
+  updateChartPalette();
+  updateDensityControl();
+  const theme = document.querySelector('meta[name="theme-color"]');
+  if (theme) theme.content = compactMode ? "#020504" : "#123f3b";
+  if (persist) {
+    try { localStorage.setItem("sg-density", compactMode ? "compact" : "standard"); } catch (_) { /* preference remains session-only */ }
+  }
+  requestAnimationFrame(() => requestAnimationFrame(redrawAllCharts));
+}
+
+function bindDensityToggle() {
+  $("#densityToggle")?.addEventListener("click", () => applyDensity(!compactMode));
 }
 
 function weather(code) {
@@ -1301,10 +1351,12 @@ function bindEvents() {
   $("#leadSelect").addEventListener("change", updateAirVerification);
   $("#refreshCopernicus").addEventListener("click", refreshPublicData);
   let resizeTimer;
-  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { drawWaterChart(); drawSkillChart(); updateAirVerification(); drawTotalHistoryChart(); }, 150); });
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(redrawAllCharts, 150); });
 }
 
 async function init() {
+  bindDensityToggle();
+  applyDensity(compactMode, false);
   bindLanguageSwitch();
   applyLanguage(currentLang, false);
   startClock();
