@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-history">
+  <link rel="stylesheet" href="./styles.css?v=20260810-history30y">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -55,6 +55,7 @@
             <time id="liveClock" role="timer" datetime="">--:--:--</time>
           </div>
           <button id="prevDate" class="icon-button" type="button" aria-label="Data precedente" data-i18n-aria="water.previous">←</button>
+          <label class="year-control"><span data-i18n="water.year">Anno</span><select id="yearPicker" aria-label="Seleziona anno" data-i18n-aria="water.yearSelector"></select></label>
           <label><span data-i18n="water.date">Data</span><input id="datePicker" type="date"></label>
           <button id="nextDate" class="icon-button" type="button" aria-label="Data successiva" data-i18n-aria="water.next">→</button>
           <button id="todayButton" class="text-button" type="button" data-i18n="water.today">Oggi</button>
@@ -65,35 +66,35 @@
 
       <div class="kpi-grid">
         <article class="kpi enhanced">
-          <div class="kpi-top"><span>Enhanced</span><span class="source-pill ours" data-i18n="water.ourModel">Nostro modello</span></div>
-          <h3 data-i18n="water.lagoon">Acqua Santa Gilla</h3>
+          <div class="kpi-top"><span id="glmKicker">Enhanced</span><span class="source-pill ours" id="glmSource" data-i18n="water.ourModel">Nostro modello</span></div>
+          <h3 id="glmTitle" data-i18n="water.lagoon">Acqua Santa Gilla</h3>
           <div class="value" id="glmValue">-</div>
           <p id="glmRange" data-i18n="water.rangeUnavailable">Intervallo non disponibile</p>
         </article>
         <article class="kpi copernicus">
-          <div class="kpi-top"><span>Offshore</span><span class="source-pill cop">Copernicus</span></div>
-          <h3 data-i18n="water.medModel">Modello Mediterraneo</h3>
+          <div class="kpi-top"><span id="copKicker">Offshore</span><span class="source-pill cop" id="copSource">Copernicus</span></div>
+          <h3 id="copTitle" data-i18n="water.medModel">Modello Mediterraneo</h3>
           <div class="value" id="copValue">-</div>
-          <p data-i18n="water.surface">Superficie, Golfo di Cagliari</p>
+          <p id="copNote" data-i18n="water.surface">Superficie, Golfo di Cagliari</p>
         </article>
         <article class="kpi satellite">
-          <div class="kpi-top"><span data-i18n="water.observation">Osservazione L4</span><span class="source-pill sat">Satellite</span></div>
-          <h3>SST offshore</h3>
+          <div class="kpi-top"><span id="satKicker" data-i18n="water.observation">Osservazione L4</span><span class="source-pill sat" id="satSource">Satellite</span></div>
+          <h3 id="satTitle">SST offshore</h3>
           <div class="value" id="satValue">-</div>
           <p id="satDate" data-i18n="water.lastAvailable">Ultimo dato disponibile</p>
         </article>
         <article class="kpi context">
-          <div class="kpi-top"><span data-i18n="water.public">Pubblico</span><span class="source-pill proxy">Proxy</span></div>
-          <h3>Marine API offshore</h3>
+          <div class="kpi-top"><span id="proxyKicker" data-i18n="water.public">Pubblico</span><span class="source-pill proxy" id="proxySource">Proxy</span></div>
+          <h3 id="proxyTitle">Marine API offshore</h3>
           <div class="value" id="proxyValue">-</div>
           <p id="proxyRange" data-i18n="water.dailyMinMax">Min e max giornalieri</p>
         </article>
       </div>
 
       <div class="comparison-strip" aria-label="Differenze calcolate" data-i18n-aria="diff.aria">
-        <div><span data-i18n="diff.copGlm">Copernicus meno GLM</span><b id="diffCopGlm">-</b></div>
-        <div><span data-i18n="diff.satGlm">Satellite meno GLM</span><b id="diffSatGlm">-</b></div>
-        <div><span data-i18n="diff.copSat">Copernicus meno satellite</span><b id="diffCopSat">-</b></div>
+        <div><span id="diffCopGlmLabel" data-i18n="diff.copGlm">Copernicus meno GLM</span><b id="diffCopGlm">-</b></div>
+        <div><span id="diffSatGlmLabel" data-i18n="diff.satGlm">Satellite meno GLM</span><b id="diffSatGlm">-</b></div>
+        <div><span id="diffCopSatLabel" data-i18n="diff.copSat">Copernicus meno satellite</span><b id="diffCopSat">-</b></div>
         <button id="refreshCopernicus" class="refresh-button" type="button" data-i18n="diff.refresh">Aggiorna dato pubblico</button>
       </div>
 
@@ -278,6 +279,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-history" defer></script>
+  <script src="./app.js?v=20260810-history30y" defer></script>
 </body>
 </html>

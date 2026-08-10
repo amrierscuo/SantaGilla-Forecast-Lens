@@ -2,7 +2,7 @@
 
 ## Pubblicato
 
-Il sito distribuisce previsioni giornaliere aggregate, curve operative multimodello prive di valori osservati privati, intervalli, anomalie, soglie, metriche aggregate del notebook 03, metriche di verifica su dati meteorologici pubblici, valori puntuali pubblici Copernicus e Open-Meteo e metadati di fonte e versione.
+Il sito distribuisce previsioni giornaliere aggregate, la ricostruzione modellata 1995-2024 con climatologia e soglie derivate, curve operative multimodello prive di valori osservati privati, intervalli, anomalie, metriche aggregate del notebook 03, metriche di verifica su dati meteorologici pubblici, valori puntuali pubblici Copernicus e Open-Meteo e metadati di fonte.
 
 L'archivio rolling conserva al massimo trentuno emissioni e contiene esclusivamente date, lead, previsioni modellate e nomi delle famiglie vincitrici. Non contiene misure d'acqua osservate.
 

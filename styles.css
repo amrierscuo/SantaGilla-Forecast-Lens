@@ -64,3 +64,7 @@ body{background-image:linear-gradient(rgba(243,246,242,.965),rgba(243,246,242,.9
 .source-layout.source-only{display:block}.source-layout.source-only .source-list{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:1050px){.source-layout.source-only .source-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.source-layout.source-only .source-list{grid-template-columns:1fr}}
+
+/* Explicit year navigation for the 1995-2024 reconstruction */
+.date-controls select{border:0;background:transparent;color:var(--ink);font:inherit;font-weight:780;min-height:34px}.year-control select{min-width:66px}.date-controls button:disabled{opacity:.38;cursor:not-allowed}
+@media(max-width:720px){.year-control{flex:0 0 78px!important}.date-controls label:has(#datePicker){min-width:145px}.date-controls .live-clock{order:0}.date-controls #prevDate{order:1}.date-controls .year-control{order:2}.date-controls label:has(#datePicker){order:3}.date-controls #nextDate{order:4}.date-controls #todayButton{order:5}}
