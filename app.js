@@ -1,6 +1,6 @@
 "use strict";
 
-const COLORS = { ours: "#d84a5f", cop: "#176ea6", sat: "#1aa3a3", actual: "#173631", corrected: "#d84a5f", original: "#176ea6", grid: "#dce6e1", muted: "#6b7c76" };
+const COLORS = { ours: "#d84a5f", glm: "#76535b", direct: "#d99a35", recursive: "#24805f", cop: "#176ea6", sat: "#1aa3a3", actual: "#173631", corrected: "#d84a5f", original: "#176ea6", grid: "#dce6e1", muted: "#6b7c76" };
 const $ = (selector) => document.querySelector(selector);
 let DATA;
 let selectedDate;
@@ -16,7 +16,7 @@ const TEXT = {
   it: {
     "meta.description": "Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.",
     skip: "Vai al contenuto",
-    "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.verify": "Verifica", "nav.sources": "Fonti",
+    "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.multimodel": "Multimodello", "nav.verify": "Verifica", "nav.sources": "Fonti",
     "language.label": "Lingua dell'interfaccia",
     "hero.eyebrow": "Indicatore operativo scientifico", "hero.title": "Previsione lagunare e mare aperto, nello stesso quadro.",
     "hero.lead": "Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.",
@@ -31,6 +31,13 @@ const TEXT = {
     "water.lastAvailable": "Ultimo dato disponibile", "water.public": "Pubblico", "water.dailyMinMax": "Min e max giornalieri",
     "diff.aria": "Differenze calcolate", "diff.copGlm": "Copernicus meno GLM", "diff.satGlm": "Satellite meno GLM",
     "diff.copSat": "Copernicus meno satellite", "diff.refresh": "Aggiorna dato pubblico", "diff.updating": "Aggiornamento",
+    "mm.eyebrow": "Previsione operativa notebook 03", "mm.title": "GLM, direct e recursive nello stesso giorno valido",
+    "mm.intro": "La curva recursive seleziona a ogni lead il vincitore ufficiale del 03. I punti direct compaiono solo agli orizzonti addestrati.",
+    "mm.horizon": "Lead operativo", "mm.recursive": "Enhanced recursive", "mm.direct": "Direct selezionato",
+    "mm.directAvailability": "Disponibile a +1, +3, +5, +7 e +14", "mm.delta": "Enhanced meno GLM",
+    "mm.deltaNote": "Differenza tra due previsioni lagunari", "mm.winner": "Vincitore recursive",
+    "mm.target": "Valido il {date} - lead +{lead}", "mm.winnerNote": "Target {mode}",
+    "mm.disclosure": "Le curve operative pubbliche sono un replay locale a risorse limitate. Le metriche di skill qui sotto restano quelle ufficiali del full run 03.",
     "trajectory.title": "Traiettoria termica", "trajectory.subtitle": "Laguna modellata e superficie offshore non sono lo stesso target.",
     "trajectory.legend": "Legenda", "trajectory.chartAria": "Grafico della traiettoria termica", "trajectory.tableAria": "Dati del grafico termico",
     "trajectory.caption": "Valori della traiettoria termica", "trajectory.date": "Data",
@@ -52,6 +59,14 @@ const TEXT = {
     "air.title": "Traiettoria osservata, originale e corretta", "air.subtitle": "Le tre serie usano lo stesso giorno valido.",
     "air.actual": "Dato reale", "air.original": "Originale", "air.corrected": "Corretta", "air.chartAria": "Grafico della verifica delle previsioni",
     "air.foot": "I dati meteorologici di riferimento sono pubblici. La correzione resta sperimentale.",
+    "skill.eyebrow": "Skill ufficiale notebook 03", "skill.title": "Quale famiglia vince a ogni orizzonte?",
+    "skill.intro": "Sono pubblicate solo metriche aggregate. Full run direct, sanity check observed-day e recursive hanno protocolli diversi e non sono una classifica unica.",
+    "skill.horizon": "Orizzonte", "skill.directWinner": "Vincitore observed-day", "skill.directRmse": "RMSE observed-day",
+    "skill.recursiveWinner": "Vincitore recursive", "skill.recursiveRmse": "RMSE recursive", "skill.chartTitle": "RMSE aggregato per lead",
+    "skill.chartSubtitle": "Tre protocolli ufficiali, mostrati separatamente sullo stesso asse.", "skill.fullrun": "Direct full run",
+    "skill.observed": "Direct observed-day", "skill.recursiveLegend": "Recursive rollout", "skill.chartAria": "Metriche aggregate del notebook 03",
+    "skill.privacy": "Nessuna temperatura d'acqua osservata riga-per-riga e pubblicata.",
+    "skill.sample": "Observed-day n={direct}; recursive n={recursive}. Metriche aggregate del full run ufficiale.",
     "sources.eyebrow": "Tracciabilità", "sources.title": "Cosa usa questa previsione", "sources.open": "Apri la fonte ufficiale ↗",
     "privacy.badge": "PRIVATO", "privacy.title": "Confine privato",
     "privacy.text": "Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.",
@@ -72,7 +87,7 @@ const TEXT = {
   en: {
     "meta.description": "Operational comparison of the Santa Gilla modelled thermal forecast, Copernicus Marine and public weather data.",
     skip: "Skip to content",
-    "nav.label": "Main navigation", "nav.water": "Water", "nav.verify": "Verification", "nav.sources": "Sources",
+    "nav.label": "Main navigation", "nav.water": "Water", "nav.multimodel": "Multimodel", "nav.verify": "Verification", "nav.sources": "Sources",
     "language.label": "Interface language",
     "hero.eyebrow": "Scientific operational indicator", "hero.title": "Lagoon forecast and open sea, in one view.",
     "hero.lead": "Our enhanced model remains in focus. Copernicus Marine, satellite and public weather data provide the context needed to read differences, trajectories and limitations.",
@@ -87,6 +102,13 @@ const TEXT = {
     "water.lastAvailable": "Latest available value", "water.public": "Public", "water.dailyMinMax": "Daily minimum and maximum",
     "diff.aria": "Calculated differences", "diff.copGlm": "Copernicus minus GLM", "diff.satGlm": "Satellite minus GLM",
     "diff.copSat": "Copernicus minus satellite", "diff.refresh": "Refresh public data", "diff.updating": "Updating",
+    "mm.eyebrow": "Operational Notebook 03 forecast", "mm.title": "GLM, direct and recursive on the same valid day",
+    "mm.intro": "At each lead, the recursive curve selects the official Notebook 03 winner. Direct points appear only at trained horizons.",
+    "mm.horizon": "Operational lead", "mm.recursive": "Enhanced recursive", "mm.direct": "Selected direct",
+    "mm.directAvailability": "Available at +1, +3, +5, +7 and +14", "mm.delta": "Enhanced minus GLM",
+    "mm.deltaNote": "Difference between two lagoon forecasts", "mm.winner": "Recursive winner",
+    "mm.target": "Valid {date} - lead +{lead}", "mm.winnerNote": "Target {mode}",
+    "mm.disclosure": "Public operational curves are a resource-bounded local replay. Skill metrics below remain the official full-run Notebook 03 results.",
     "trajectory.title": "Thermal trajectory", "trajectory.subtitle": "The modelled lagoon and offshore surface are not the same target.",
     "trajectory.legend": "Legend", "trajectory.chartAria": "Thermal trajectory chart", "trajectory.tableAria": "Thermal chart data",
     "trajectory.caption": "Thermal trajectory values", "trajectory.date": "Date",
@@ -108,6 +130,14 @@ const TEXT = {
     "air.title": "Observed, original and corrected trajectory", "air.subtitle": "All three series use the same valid day.",
     "air.actual": "Observed", "air.original": "Original", "air.corrected": "Corrected", "air.chartAria": "Forecast verification chart",
     "air.foot": "Reference weather data are public. The correction remains experimental.",
+    "skill.eyebrow": "Official Notebook 03 skill", "skill.title": "Which family wins at each horizon?",
+    "skill.intro": "Only aggregate metrics are published. Direct full run, observed-day sanity check and recursive rollout use different protocols and are not one ranking.",
+    "skill.horizon": "Horizon", "skill.directWinner": "Observed-day winner", "skill.directRmse": "Observed-day RMSE",
+    "skill.recursiveWinner": "Recursive winner", "skill.recursiveRmse": "Recursive RMSE", "skill.chartTitle": "Aggregate RMSE by lead",
+    "skill.chartSubtitle": "Three official protocols, shown separately on the same axis.", "skill.fullrun": "Direct full run",
+    "skill.observed": "Direct observed-day", "skill.recursiveLegend": "Recursive rollout", "skill.chartAria": "Aggregate Notebook 03 metrics",
+    "skill.privacy": "No row-level observed water temperature is published.",
+    "skill.sample": "Observed-day n={direct}; recursive n={recursive}. Aggregate metrics from the official full run.",
     "sources.eyebrow": "Traceability", "sources.title": "What this forecast uses", "sources.open": "Open official source ↗",
     "privacy.badge": "PRIVATE", "privacy.title": "Private boundary",
     "privacy.text": "Original scientific spreadsheets, row-level observations, coefficients and the trained file are neither included nor required by this site.",
@@ -151,11 +181,11 @@ function formatNumber(value, digits = 1) {
 }
 
 function number(value, digits = 1) {
-  return Number.isFinite(Number(value)) ? `${formatNumber(value, digits)} °C` : t("common.unavailable");
+  return value !== null && value !== "" && Number.isFinite(Number(value)) ? `${formatNumber(value, digits)} °C` : t("common.unavailable");
 }
 
 function signed(value, digits = 2) {
-  return Number.isFinite(Number(value)) ? `${Number(value) >= 0 ? "+" : ""}${formatNumber(value, digits)} °C` : "-";
+  return value !== null && value !== "" && Number.isFinite(Number(value)) ? `${Number(value) >= 0 ? "+" : ""}${formatNumber(value, digits)} °C` : "-";
 }
 
 function localDate(iso) {
@@ -183,6 +213,8 @@ function applyLanguage(lang, persist = true) {
     setGeneratedDate();
     renderSources();
     updateDay();
+    updateMultimodel();
+    updateModelSkill();
     updateAirVerification();
   }
 }
@@ -207,6 +239,17 @@ function weather(code) {
 
 function byDate(list, date, key = "date") {
   return list.find((row) => row[key] === date);
+}
+
+function byLead(list, lead) {
+  return list.find((row) => Number(row.lead_days) === Number(lead));
+}
+
+function modelLabel(value) {
+  return String(value || "-")
+    .replace("SplineRidge_GAM_like", "SplineRidge GAM-like")
+    .replace("RandomForest_light", "Random Forest Light")
+    .replace("GradientBoosting_light", "Gradient Boosting Light");
 }
 
 function latestOnOrBefore(list, date) {
@@ -264,6 +307,29 @@ function updateDay() {
   renderWaterTable();
 }
 
+function updateMultimodel() {
+  const lead = Number($("#modelLeadSelect").value || 1);
+  const row = byLead(DATA.multimodel_03.operational, lead);
+  $("#mmRecursiveValue").textContent = number(row?.enhanced_recursive_c, 2);
+  $("#mmDirectValue").textContent = number(row?.direct_selected_c, 2);
+  $("#mmDeltaValue").textContent = signed(row?.delta_vs_glm_c, 2);
+  $("#mmWinnerModel").textContent = modelLabel(row?.winner_model);
+  $("#mmTargetDate").textContent = row ? t("mm.target", { date: localDate(row.date), lead }) : "-";
+  $("#mmWinnerNote").textContent = t("mm.winnerNote", { mode: "next" });
+}
+
+function updateModelSkill() {
+  const lead = Number($("#skillLeadSelect").value || 1);
+  const observed = byLead(DATA.multimodel_03.observed_day_skill, lead);
+  const recursive = byLead(DATA.multimodel_03.recursive_skill, lead);
+  $("#skillDirectWinner").textContent = modelLabel(observed?.model);
+  $("#skillDirectRmse").textContent = number(observed?.rmse_c, 3);
+  $("#skillRecursiveWinner").textContent = modelLabel(recursive?.model);
+  $("#skillRecursiveRmse").textContent = number(recursive?.rmse_c, 3);
+  $("#skillSampleNote").textContent = t("skill.sample", { direct: observed?.n ?? "-", recursive: recursive?.n ?? "-" });
+  drawSkillChart();
+}
+
 function renderWeather(row) {
   const [conditionIcon, conditionKey] = weather(row?.weather_code);
   const sunshine = row?.sunshine_duration ? row.sunshine_duration / 3600 : null;
@@ -315,21 +381,37 @@ function chartFrame(canvas, values, labels) {
     if (i % labelStep !== 0 && i !== labels.length - 1) return;
     ctx.fillStyle = COLORS.muted;
     ctx.textAlign = "center";
-    ctx.fillText(label.slice(5).replace("-", "/"), x(i), height - 13);
+    const display = typeof label === "string" && label.includes("-") ? label.slice(5).replace("-", "/") : `+${label}`;
+    ctx.fillText(display, x(i), height - 13);
   });
   return { ctx, width, height, pad, x, y };
 }
 
-function drawSeries(frame, values, color, width = 2.5, dash = []) {
+function drawSeries(frame, values, color, width = 2.5, dash = [], connectGaps = false) {
   const { ctx, x, y } = frame;
   ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.lineJoin = "round"; ctx.lineCap = "round";
   ctx.beginPath();
   let active = false;
   values.forEach((value, i) => {
-    if (!Number.isFinite(value)) { active = false; return; }
+    if (!Number.isFinite(value)) { if (!connectGaps) active = false; return; }
     if (!active) { ctx.moveTo(x(i), y(value)); active = true; } else ctx.lineTo(x(i), y(value));
   });
   ctx.stroke(); ctx.setLineDash([]);
+}
+
+function drawPoints(frame, values, color, size = 4.5, diamond = false) {
+  const { ctx, x, y } = frame;
+  ctx.fillStyle = color;
+  values.forEach((value, i) => {
+    if (!Number.isFinite(value)) return;
+    ctx.save();
+    ctx.translate(x(i), y(value));
+    if (diamond) ctx.rotate(Math.PI / 4);
+    ctx.beginPath();
+    if (diamond) ctx.rect(-size, -size, size * 2, size * 2); else ctx.arc(0, 0, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
 }
 
 function drawWaterChart() {
@@ -339,14 +421,31 @@ function drawWaterChart() {
   const high = DATA.water_forecast.map((row) => row.q95_c);
   const cop = labels.map((date) => byDate(DATA.copernicus.model_daily, date)?.value_c ?? NaN);
   const sat = labels.map((date) => byDate(DATA.copernicus.satellite_daily, date)?.value_c ?? NaN);
-  const frame = chartFrame($("#waterChart"), [...low, ...high, ...cop, ...sat], labels);
+  const operational = DATA.multimodel_03.operational;
+  const enhanced = labels.map((date) => byDate(operational, date)?.enhanced_recursive_c ?? NaN);
+  const direct = labels.map((date) => byDate(operational, date)?.direct_selected_c ?? NaN);
+  const ensembleLow = labels.map((date) => byDate(operational, date)?.ensemble_min_c ?? NaN);
+  const ensembleHigh = labels.map((date) => byDate(operational, date)?.ensemble_max_c ?? NaN);
+  const frame = chartFrame($("#waterChart"), [...low, ...high, ...ensembleLow, ...ensembleHigh, ...enhanced, ...direct, ...cop, ...sat], labels);
   const { ctx, x, y } = frame;
-  ctx.fillStyle = "rgba(216,74,95,.12)";
+  ctx.fillStyle = "rgba(118,83,91,.08)";
   ctx.beginPath();
   high.forEach((v, i) => i ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v)));
   [...low].reverse().forEach((v, rev) => { const i = low.length - 1 - rev; ctx.lineTo(x(i), y(v)); });
   ctx.closePath(); ctx.fill();
-  drawSeries(frame, glm, COLORS.ours, 3.2);
+  const validEnsemble = ensembleHigh.map((value, i) => Number.isFinite(value) && Number.isFinite(ensembleLow[i]));
+  const firstBand = validEnsemble.indexOf(true);
+  if (firstBand >= 0) {
+    ctx.fillStyle = "rgba(216,74,95,.13)";
+    ctx.beginPath();
+    for (let i = firstBand; i < ensembleHigh.length && validEnsemble[i]; i += 1) i === firstBand ? ctx.moveTo(x(i), y(ensembleHigh[i])) : ctx.lineTo(x(i), y(ensembleHigh[i]));
+    for (let i = ensembleLow.length - 1; i >= firstBand; i -= 1) if (validEnsemble[i]) ctx.lineTo(x(i), y(ensembleLow[i]));
+    ctx.closePath(); ctx.fill();
+  }
+  drawSeries(frame, glm, COLORS.glm, 2.2, [7, 4]);
+  drawSeries(frame, enhanced, COLORS.ours, 4.1);
+  drawPoints(frame, enhanced, COLORS.ours, 3.3);
+  drawPoints(frame, direct, COLORS.direct, 4.6, true);
   drawSeries(frame, cop, COLORS.cop, 2.5);
   drawSeries(frame, sat, COLORS.sat, 2.5, [5, 4]);
   const index = labels.indexOf(selectedDate);
@@ -359,9 +458,25 @@ function renderWaterTable() {
   const rows = DATA.water_forecast.map((row) => {
     const cop = byDate(DATA.copernicus.model_daily, row.date);
     const sat = byDate(DATA.copernicus.satellite_daily, row.date);
-    return `<tr><td>${row.date}</td><td>${formatNumber(row.glm_c, 3)}</td><td>${cop ? formatNumber(cop.value_c, 3) : ""}</td><td>${sat ? formatNumber(sat.value_c, 3) : ""}</td></tr>`;
+    const mm = byDate(DATA.multimodel_03.operational, row.date);
+    return `<tr><td>${row.date}</td><td>${formatNumber(row.glm_c, 3)}</td><td>${mm ? formatNumber(mm.enhanced_recursive_c, 3) : ""}</td><td>${Number.isFinite(mm?.direct_selected_c) ? formatNumber(mm.direct_selected_c, 3) : ""}</td><td>${cop ? formatNumber(cop.value_c, 3) : ""}</td><td>${sat ? formatNumber(sat.value_c, 3) : ""}</td></tr>`;
   }).join("");
-  $("#waterTable").innerHTML = `<table><caption>${t("trajectory.caption")}</caption><thead><tr><th>${t("trajectory.date")}</th><th>GLM</th><th>Copernicus</th><th>Satellite</th></tr></thead><tbody>${rows}</tbody></table>`;
+  $("#waterTable").innerHTML = `<table><caption>${t("trajectory.caption")}</caption><thead><tr><th>${t("trajectory.date")}</th><th>GLM</th><th>Enhanced recursive</th><th>Direct</th><th>Copernicus</th><th>Satellite</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function drawSkillChart() {
+  const recursiveRows = DATA.multimodel_03.recursive_skill;
+  const labels = recursiveRows.map((row) => Number(row.lead_days));
+  const fullRun = labels.map((lead) => byLead(DATA.multimodel_03.direct_full_run_skill, lead)?.rmse_c ?? NaN);
+  const observed = labels.map((lead) => byLead(DATA.multimodel_03.observed_day_skill, lead)?.rmse_c ?? NaN);
+  const recursive = labels.map((lead) => byLead(recursiveRows, lead)?.rmse_c ?? NaN);
+  const frame = chartFrame($("#skillChart"), [...fullRun, ...observed, ...recursive], labels);
+  drawSeries(frame, fullRun, COLORS.cop, 2.4, [6, 4], true);
+  drawPoints(frame, fullRun, COLORS.cop, 3.7);
+  drawSeries(frame, observed, COLORS.ours, 2.8, [], true);
+  drawPoints(frame, observed, COLORS.ours, 4.1, true);
+  drawSeries(frame, recursive, COLORS.recursive, 3);
+  drawPoints(frame, recursive, COLORS.recursive, 3.5);
 }
 
 function updateAirVerification() {
@@ -440,15 +555,18 @@ async function refreshPublicData() {
 
 function bindEvents() {
   const dates = DATA.water_forecast.map((row) => row.date);
+  $("#modelLeadSelect").innerHTML = DATA.multimodel_03.operational.map((row) => `<option value="${row.lead_days}">+${row.lead_days}</option>`).join("");
   $("#datePicker").min = dates[0]; $("#datePicker").max = dates.at(-1);
   $("#datePicker").addEventListener("change", (event) => setDate(event.target.value));
   $("#prevDate").addEventListener("click", () => setDate(dates[Math.max(0, dates.indexOf(selectedDate) - 1)]));
   $("#nextDate").addEventListener("click", () => setDate(dates[Math.min(dates.length - 1, dates.indexOf(selectedDate) + 1)]));
   $("#todayButton").addEventListener("click", () => setDate(DATA.meta.reference_date));
+  $("#modelLeadSelect").addEventListener("change", updateMultimodel);
+  $("#skillLeadSelect").addEventListener("change", updateModelSkill);
   $("#leadSelect").addEventListener("change", updateAirVerification);
   $("#refreshCopernicus").addEventListener("click", refreshPublicData);
   let resizeTimer;
-  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { drawWaterChart(); updateAirVerification(); }, 150); });
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { drawWaterChart(); drawSkillChart(); updateAirVerification(); }, 150); });
 }
 
 async function init() {
@@ -466,6 +584,8 @@ async function init() {
     renderSources();
     bindEvents();
     setDate(DATA.meta.reference_date);
+    updateMultimodel();
+    updateModelSkill();
     updateAirVerification();
   } catch (error) {
     $("#truthBanner").textContent = t("dynamic.dataError");

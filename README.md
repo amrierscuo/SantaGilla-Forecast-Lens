@@ -1,18 +1,14 @@
 # Santa Gilla Forecast Lens
 
-Tool pubblico read-only per confrontare:
-
-- previsione modellata della temperatura dell'acqua di Santa Gilla;
-- modello Copernicus Marine sul punto offshore nel Golfo di Cagliari;
-- SST satellitare Copernicus L4 NRT;
-- proxy marino e forcing meteorologico pubblico;
-- forecast meteorologico originale, correzione sperimentale e riferimento pubblico.
+Tool pubblico read-only per confrontare la baseline GLM 01, le traiettorie operative direct e recursive del notebook 03, il modello Copernicus Marine sul punto offshore nel Golfo di Cagliari, la SST satellitare Copernicus L4 NRT, proxy marini, forcing meteorologico pubblico e la verifica omogenea delle previsioni meteorologiche.
 
 ## Confine scientifico
 
 La temperatura lagunare e la temperatura marina offshore non rappresentano lo stesso target. Il confronto misura un contrasto spaziale e non costituisce una validazione diretta del modello lagunare.
 
 Il repository non contiene notebook, Excel scientifici, osservazioni riga-per-riga, coefficienti, dati di training o file del modello addestrato.
+
+Le curve operative multimodello sono indicate come replay locale a risorse limitate. Le metriche aggregate direct, observed-day e recursive provengono invece dal full run ufficiale del notebook 03. I protocolli sono distinti e non costituiscono una classifica unica.
 
 ## Stato
 

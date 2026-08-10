@@ -29,6 +29,7 @@
       <div class="nav-actions">
         <div class="nav-links">
           <a href="#acqua" data-i18n="nav.water">Acqua</a>
+          <a href="#multimodello" data-i18n="nav.multimodel">Multimodello</a>
           <a href="#verifica" data-i18n="nav.verify">Verifica</a>
           <a href="#fonti" data-i18n="nav.sources">Fonti</a>
         </div>
@@ -91,12 +92,32 @@
         <button id="refreshCopernicus" class="refresh-button" type="button" data-i18n="diff.refresh">Aggiorna dato pubblico</button>
       </div>
 
+      <section class="model-console" id="multimodello" aria-labelledby="multimodelTitle">
+        <div class="model-console-heading">
+          <div>
+            <p class="eyebrow dark" data-i18n="mm.eyebrow">Previsione operativa notebook 03</p>
+            <h2 id="multimodelTitle" data-i18n="mm.title">GLM, direct e recursive nello stesso giorno valido</h2>
+            <p data-i18n="mm.intro">La curva recursive seleziona a ogni lead il vincitore ufficiale del 03. I punti direct compaiono solo agli orizzonti addestrati.</p>
+          </div>
+          <label class="select-control"><span data-i18n="mm.horizon">Lead operativo</span><select id="modelLeadSelect"></select></label>
+        </div>
+        <div class="model-metric-grid">
+          <article class="model-metric primary"><span data-i18n="mm.recursive">Enhanced recursive</span><b id="mmRecursiveValue">-</b><small id="mmTargetDate">-</small></article>
+          <article class="model-metric"><span data-i18n="mm.direct">Direct selezionato</span><b id="mmDirectValue">-</b><small data-i18n="mm.directAvailability">Disponibile a +1, +3, +5, +7 e +14</small></article>
+          <article class="model-metric"><span data-i18n="mm.delta">Enhanced meno GLM</span><b id="mmDeltaValue">-</b><small data-i18n="mm.deltaNote">Differenza tra due previsioni lagunari</small></article>
+          <article class="model-metric"><span data-i18n="mm.winner">Vincitore recursive</span><b class="model-name" id="mmWinnerModel">-</b><small id="mmWinnerNote">-</small></article>
+        </div>
+        <p class="model-disclosure" data-i18n="mm.disclosure">Le curve operative pubbliche sono un replay locale a risorse limitate. Le metriche di skill qui sotto restano quelle ufficiali del full run 03.</p>
+      </section>
+
       <div class="two-column">
         <article class="panel chart-panel">
           <div class="panel-heading">
             <div><h3 data-i18n="trajectory.title">Traiettoria termica</h3><p data-i18n="trajectory.subtitle">Laguna modellata e superficie offshore non sono lo stesso target.</p></div>
             <div class="legend" aria-label="Legenda" data-i18n-aria="trajectory.legend">
-              <span><i class="line ours"></i>GLM</span>
+              <span><i class="line glm"></i>GLM 01</span>
+              <span><i class="line ours"></i>Enhanced recursive</span>
+              <span><i class="point direct"></i>Direct</span>
               <span><i class="line cop"></i>Copernicus</span>
               <span><i class="line sat"></i>Satellite</span>
             </div>
@@ -118,6 +139,35 @@
       </div>
 
       <div class="weather-row" id="weatherRow" aria-label="Contesto meteorologico" data-i18n-aria="weather.aria"></div>
+    </section>
+
+    <section class="section skill-section" aria-labelledby="skillTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow dark" data-i18n="skill.eyebrow">Skill ufficiale notebook 03</p>
+          <h2 id="skillTitle" data-i18n="skill.title">Quale famiglia vince a ogni orizzonte?</h2>
+          <p class="section-intro" data-i18n="skill.intro">Sono pubblicate solo metriche aggregate. Full run direct, sanity check observed-day e recursive hanno protocolli diversi e non sono una classifica unica.</p>
+        </div>
+        <label class="select-control"><span data-i18n="skill.horizon">Orizzonte</span><select id="skillLeadSelect"><option value="1">+1</option><option value="3">+3</option><option value="5">+5</option><option value="7">+7</option><option value="14">+14</option></select></label>
+      </div>
+      <div class="metric-grid skill-metrics">
+        <article><span data-i18n="skill.directWinner">Vincitore observed-day</span><b class="metric-model" id="skillDirectWinner">-</b></article>
+        <article><span data-i18n="skill.directRmse">RMSE observed-day</span><b id="skillDirectRmse">-</b></article>
+        <article><span data-i18n="skill.recursiveWinner">Vincitore recursive</span><b class="metric-model" id="skillRecursiveWinner">-</b></article>
+        <article><span data-i18n="skill.recursiveRmse">RMSE recursive</span><b id="skillRecursiveRmse">-</b></article>
+      </div>
+      <article class="panel chart-panel skill-panel">
+        <div class="panel-heading">
+          <div><h3 data-i18n="skill.chartTitle">RMSE aggregato per lead</h3><p data-i18n="skill.chartSubtitle">Tre protocolli ufficiali, mostrati separatamente sullo stesso asse.</p></div>
+          <div class="legend">
+            <span><i class="line fullrun"></i><span data-i18n="skill.fullrun">Direct full run</span></span>
+            <span><i class="line observed"></i><span data-i18n="skill.observed">Direct observed-day</span></span>
+            <span><i class="line recursive"></i><span data-i18n="skill.recursiveLegend">Recursive rollout</span></span>
+          </div>
+        </div>
+        <div class="canvas-wrap"><canvas id="skillChart" role="img" aria-label="Metriche aggregate del notebook 03" data-i18n-aria="skill.chartAria"></canvas></div>
+        <div class="chart-foot"><span id="skillSampleNote"></span><span data-i18n="skill.privacy">Nessuna temperatura d'acqua osservata riga-per-riga e pubblicata.</span></div>
+      </article>
     </section>
 
     <section class="section verification" id="verifica" aria-labelledby="verifyTitle">
@@ -186,7 +236,7 @@
           <div class="status-date" id="generatedDate" data-i18n="status.loading">Caricamento</div>
           <dl>
             <div><dt data-i18n="status.area">Area</dt><dd>Santa Gilla</dd></div>
-            <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01</dd></div>
+            <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01 + MM 03</dd></div>
             <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
           </dl>
           <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
