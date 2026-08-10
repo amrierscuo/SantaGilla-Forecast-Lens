@@ -22,7 +22,7 @@ const TEXT = {
     "hero.lead": "Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.",
     "hero.compare": "Confronta oggi", "hero.method": "Come leggere i dati",
     "status.aria": "Stato del prodotto", "status.snapshot": "Snapshot verificato", "status.loading": "Caricamento",
-    "status.updated": "Aggiornato {date}", "status.area": "Area", "status.model": "Modello", "status.access": "Accesso",
+    "status.updated": "Aggiornato {date}", "status.area": "Area", "status.model": "Modello", "status.validTo": "Valido fino al", "status.access": "Accesso",
     "status.privacy": "Nessun dato osservativo privato è distribuito dal sito.",
     "water.eyebrow": "Confronto termico giornaliero", "water.title": "Acqua modellata e contesto Copernicus",
     "water.dateSelector": "Seleziona la data", "water.previous": "Data precedente", "water.date": "Data", "water.next": "Data successiva", "water.today": "Oggi",
@@ -37,6 +37,9 @@ const TEXT = {
     "mm.directAvailability": "Disponibile a +1, +3, +5, +7 e +14", "mm.delta": "Enhanced meno GLM",
     "mm.deltaNote": "Differenza tra due previsioni lagunari", "mm.winner": "Vincitore recursive",
     "mm.target": "Valido il {date} - lead +{lead}", "mm.winnerNote": "Target {mode}",
+    "mm.issue": "Emissione {date} - orizzonte fino al {valid}", "mm.fresh": "Aggiornamento giornaliero attivo",
+    "mm.stale": "Ultima emissione non aggiornata: previsione da rinnovare", "mm.outside": "La data selezionata non appartiene all'emissione corrente",
+    "mm.next": "Per oggi viene mostrata la prima previsione futura, valida il {date}",
     "mm.disclosure": "Le curve operative pubbliche sono un replay locale a risorse limitate. Le metriche di skill qui sotto restano quelle ufficiali del full run 03.",
     "trajectory.title": "Traiettoria termica", "trajectory.subtitle": "Laguna modellata e superficie offshore non sono lo stesso target.",
     "trajectory.legend": "Legenda", "trajectory.chartAria": "Grafico della traiettoria termica", "trajectory.tableAria": "Dati del grafico termico",
@@ -79,6 +82,9 @@ const TEXT = {
     "dynamic.noPrevious": "Nessun dato precedente disponibile", "dynamic.proxyRange": "Intervallo {min}-{max} °C", "dynamic.noMinMax": "Min e max non disponibili",
     "dynamic.aboveP95": "sopra p95", "dynamic.aboveP90": "sopra p90", "dynamic.belowP90": "sotto p90",
     "dynamic.truth": "{date} - GLM lagunare {thermal}. Copernicus e satellite descrivono il punto offshore e non sostituiscono un logger interno.",
+    "dynamic.futureTruth": "{date} - previsione lagunare. Satellite ancora non osservato; Copernicus e proxy compaiono solo entro il rispettivo orizzonte.",
+    "dynamic.pastTruth": "{date} - giorno recente della finestra rolling. Le osservazioni pubbliche sono mostrate solo se realmente disponibili.",
+    "dynamic.satellitePending": "Osservazione non ancora disponibile per il giorno futuro",
     "dynamic.spatial": "Il mare esterno modellato è {delta} °C {direction} della stima lagunare. È un contrasto spaziale, non un errore del GLM.",
     "dynamic.warmer": "più caldo", "dynamic.cooler": "più freddo", "dynamic.noCop": "Copernicus non è disponibile per questa data. La stima lagunare resta visualizzata con le sue soglie.",
     "dynamic.updated": "{count} serie pubbliche aggiornate per {date}.", "dynamic.liveError": "La fonte live non risponde. Rimane visibile lo snapshot verificato.",
@@ -93,7 +99,7 @@ const TEXT = {
     "hero.lead": "Our enhanced model remains in focus. Copernicus Marine, satellite and public weather data provide the context needed to read differences, trajectories and limitations.",
     "hero.compare": "Compare today", "hero.method": "How to read the data",
     "status.aria": "Product status", "status.snapshot": "Verified snapshot", "status.loading": "Loading",
-    "status.updated": "Updated {date}", "status.area": "Area", "status.model": "Model", "status.access": "Access",
+    "status.updated": "Updated {date}", "status.area": "Area", "status.model": "Model", "status.validTo": "Valid through", "status.access": "Access",
     "status.privacy": "No private observational data are distributed by this site.",
     "water.eyebrow": "Daily thermal comparison", "water.title": "Modelled water and Copernicus context",
     "water.dateSelector": "Select date", "water.previous": "Previous date", "water.date": "Date", "water.next": "Next date", "water.today": "Today",
@@ -108,6 +114,9 @@ const TEXT = {
     "mm.directAvailability": "Available at +1, +3, +5, +7 and +14", "mm.delta": "Enhanced minus GLM",
     "mm.deltaNote": "Difference between two lagoon forecasts", "mm.winner": "Recursive winner",
     "mm.target": "Valid {date} - lead +{lead}", "mm.winnerNote": "Target {mode}",
+    "mm.issue": "Issue {date} - horizon through {valid}", "mm.fresh": "Daily refresh active",
+    "mm.stale": "Latest issue is stale: forecast refresh required", "mm.outside": "The selected date is not part of the current issue",
+    "mm.next": "For today, the first future forecast is shown, valid {date}",
     "mm.disclosure": "Public operational curves are a resource-bounded local replay. Skill metrics below remain the official full-run Notebook 03 results.",
     "trajectory.title": "Thermal trajectory", "trajectory.subtitle": "The modelled lagoon and offshore surface are not the same target.",
     "trajectory.legend": "Legend", "trajectory.chartAria": "Thermal trajectory chart", "trajectory.tableAria": "Thermal chart data",
@@ -150,6 +159,9 @@ const TEXT = {
     "dynamic.noPrevious": "No earlier value available", "dynamic.proxyRange": "Range {min}-{max} °C", "dynamic.noMinMax": "Minimum and maximum unavailable",
     "dynamic.aboveP95": "above p95", "dynamic.aboveP90": "above p90", "dynamic.belowP90": "below p90",
     "dynamic.truth": "{date} - lagoon GLM {thermal}. Copernicus and satellite describe the offshore point and do not replace an internal logger.",
+    "dynamic.futureTruth": "{date} - lagoon forecast. Satellite not yet observed; Copernicus and the proxy appear only within their own horizons.",
+    "dynamic.pastTruth": "{date} - recent day in the rolling window. Public observations are shown only when actually available.",
+    "dynamic.satellitePending": "Observation not yet available for the future day",
     "dynamic.spatial": "The modelled open sea is {delta} °C {direction} than the lagoon estimate. This is a spatial contrast, not a GLM error.",
     "dynamic.warmer": "warmer", "dynamic.cooler": "cooler", "dynamic.noCop": "Copernicus is unavailable for this date. The lagoon estimate remains visible with its thresholds.",
     "dynamic.updated": "{count} public series updated for {date}.", "dynamic.liveError": "The live source is not responding. The verified snapshot remains visible.",
@@ -197,6 +209,7 @@ function setGeneratedDate() {
   if (!DATA) return;
   const date = new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(DATA.meta.generated_at));
   $("#generatedDate").textContent = t("status.updated", { date });
+  $("#validThrough").textContent = localDate(DATA.meta.valid_to || DATA.multimodel_03.meta.valid_through);
 }
 
 function applyLanguage(lang, persist = true) {
@@ -264,19 +277,24 @@ function toast(message) {
   toast.timer = setTimeout(() => node.classList.remove("show"), 3200);
 }
 
-function setDate(date) {
+function setDate(date, syncModel = true) {
   const dates = DATA.water_forecast.map((row) => row.date);
   selectedDate = dates.includes(date) ? date : DATA.meta.reference_date;
   $("#datePicker").value = selectedDate;
   $("#prevDate").disabled = dates.indexOf(selectedDate) <= 0;
   $("#nextDate").disabled = dates.indexOf(selectedDate) >= dates.length - 1;
   updateDay();
+  if (syncModel) updateMultimodel();
 }
 
 function updateDay() {
   const water = byDate(DATA.water_forecast, selectedDate);
   const cop = byDate(DATA.copernicus.model_daily, selectedDate);
-  const satellite = latestOnOrBefore(DATA.copernicus.satellite_daily, selectedDate);
+  const isFuture = selectedDate > DATA.meta.reference_date;
+  const isPast = selectedDate < DATA.meta.reference_date;
+  const satellite = isFuture
+    ? byDate(DATA.copernicus.satellite_daily, selectedDate)
+    : latestOnOrBefore(DATA.copernicus.satellite_daily, selectedDate);
   const proxy = byDate(DATA.offshore_proxy, selectedDate);
   const dayWeather = byDate(DATA.weather, selectedDate);
 
@@ -284,7 +302,9 @@ function updateDay() {
   $("#glmRange").textContent = water ? t("dynamic.range", { low: formatNumber(water.q05_c, 2), high: formatNumber(water.q95_c, 2) }) : t("water.rangeUnavailable");
   $("#copValue").textContent = number(cop?.value_c, 2);
   $("#satValue").textContent = number(satellite?.value_c, 2);
-  $("#satDate").textContent = satellite ? t("dynamic.l4", { date: localDate(satellite.date) }) : t("dynamic.noPrevious");
+  $("#satDate").textContent = satellite
+    ? t("dynamic.l4", { date: localDate(satellite.date) })
+    : isFuture ? t("dynamic.satellitePending") : t("dynamic.noPrevious");
   $("#proxyValue").textContent = number(proxy?.mean_c, 2);
   $("#proxyRange").textContent = proxy ? t("dynamic.proxyRange", { min: formatNumber(proxy.min_c, 1), max: formatNumber(proxy.max_c, 1) }) : t("dynamic.noMinMax");
 
@@ -296,7 +316,10 @@ function updateDay() {
   $("#p95Value").textContent = number(water?.p95_c, 2);
 
   const thermal = water?.above_p95 ? t("dynamic.aboveP95") : water?.above_p90 ? t("dynamic.aboveP90") : t("dynamic.belowP90");
-  $("#truthBanner").textContent = t("dynamic.truth", { date: localDate(selectedDate), thermal });
+  $("#truthBanner").textContent = isFuture
+    ? t("dynamic.futureTruth", { date: localDate(selectedDate) })
+    : isPast ? t("dynamic.pastTruth", { date: localDate(selectedDate) })
+      : t("dynamic.truth", { date: localDate(selectedDate), thermal });
   $("#readingTitle").textContent = water?.above_p95 ? t("reading.high") : water?.above_p90 ? t("reading.risk") : t("reading.below");
   $("#readingText").textContent = cop && water
     ? t("dynamic.spatial", { delta: formatNumber(Math.abs(cop.value_c - water.glm_c), 2), direction: cop.value_c >= water.glm_c ? t("dynamic.warmer") : t("dynamic.cooler") })
@@ -308,14 +331,27 @@ function updateDay() {
 }
 
 function updateMultimodel() {
-  const lead = Number($("#modelLeadSelect").value || 1);
-  const row = byLead(DATA.multimodel_03.operational, lead);
+  const operational = DATA.multimodel_03.operational;
+  const issueDate = DATA.multimodel_03.meta.issue_date;
+  const exact = byDate(operational, selectedDate);
+  let row = exact;
+  if (exact) $("#modelLeadSelect").value = String(exact.lead_days);
+  if (!row && selectedDate === issueDate) row = byLead(operational, Number($("#modelLeadSelect").value || 1));
+  const lead = Number(row?.lead_days || $("#modelLeadSelect").value || 1);
   $("#mmRecursiveValue").textContent = number(row?.enhanced_recursive_c, 2);
   $("#mmDirectValue").textContent = number(row?.direct_selected_c, 2);
   $("#mmDeltaValue").textContent = signed(row?.delta_vs_glm_c, 2);
   $("#mmWinnerModel").textContent = modelLabel(row?.winner_model);
   $("#mmTargetDate").textContent = row ? t("mm.target", { date: localDate(row.date), lead }) : "-";
   $("#mmWinnerNote").textContent = t("mm.winnerNote", { mode: "next" });
+  $("#mmIssueStatus").textContent = t("mm.issue", {
+    date: localDate(issueDate),
+    valid: localDate(DATA.multimodel_03.meta.valid_through)
+  });
+  const ageHours = (Date.now() - new Date(DATA.meta.generated_at).getTime()) / 3600000;
+  $("#mmFreshnessStatus").textContent = ageHours <= 36 ? t("mm.fresh") : t("mm.stale");
+  if (!row) $("#mmTargetDate").textContent = t("mm.outside");
+  if (selectedDate === issueDate && row) $("#mmTargetDate").textContent = t("mm.next", { date: localDate(row.date) });
 }
 
 function updateModelSkill() {
@@ -561,7 +597,11 @@ function bindEvents() {
   $("#prevDate").addEventListener("click", () => setDate(dates[Math.max(0, dates.indexOf(selectedDate) - 1)]));
   $("#nextDate").addEventListener("click", () => setDate(dates[Math.min(dates.length - 1, dates.indexOf(selectedDate) + 1)]));
   $("#todayButton").addEventListener("click", () => setDate(DATA.meta.reference_date));
-  $("#modelLeadSelect").addEventListener("change", updateMultimodel);
+  $("#modelLeadSelect").addEventListener("change", () => {
+    const row = byLead(DATA.multimodel_03.operational, Number($("#modelLeadSelect").value));
+    if (row) setDate(row.date, false);
+    updateMultimodel();
+  });
   $("#skillLeadSelect").addEventListener("change", updateModelSkill);
   $("#leadSelect").addEventListener("change", updateAirVerification);
   $("#refreshCopernicus").addEventListener("click", refreshPublicData);

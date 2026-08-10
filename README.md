@@ -10,6 +10,8 @@ Il repository non contiene notebook, Excel scientifici, osservazioni riga-per-ri
 
 Le curve operative multimodello sono indicate come replay locale a risorse limitate. Le metriche aggregate direct, observed-day e recursive provengono invece dal full run ufficiale del notebook 03. I protocolli sono distinti e non costituiscono una classifica unica.
 
+La finestra operativa viene rigenerata ogni giorno: due giorni recenti, il giorno di emissione e quattordici giorni futuri. Ogni emissione conserva soltanto le proprie previsioni pubblicabili per consentire confronti successivi senza distribuire la temperatura d'acqua osservata privata.
+
 ## Stato
 
 Prototipo scientifico operativo. Non adatto alla navigazione, ad allerta sanitaria o a decisioni regolatorie.
