@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-clean">
+  <link rel="stylesheet" href="./styles.css?v=20260810-history">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -100,17 +100,17 @@
       <section class="model-console" id="multimodello" aria-labelledby="multimodelTitle">
         <div class="model-console-heading">
           <div>
-            <p class="eyebrow dark" data-i18n="mm.eyebrow">Previsione operativa notebook 03</p>
+            <p class="eyebrow dark" id="multimodelEyebrow" data-i18n="mm.eyebrow">Previsione operativa notebook 03</p>
             <h2 id="multimodelTitle" data-i18n="mm.title">GLM, direct e recursive nello stesso giorno valido</h2>
-            <p data-i18n="mm.intro">La curva recursive seleziona a ogni lead il vincitore ufficiale del 03. I punti direct compaiono solo agli orizzonti addestrati.</p>
+            <p id="multimodelIntro" data-i18n="mm.intro">La curva recursive seleziona a ogni lead il vincitore ufficiale del 03. I punti direct compaiono solo agli orizzonti addestrati.</p>
           </div>
-          <label class="select-control"><span data-i18n="mm.horizon">Lead operativo</span><select id="modelLeadSelect"></select></label>
+          <label class="select-control" id="modelLeadControl"><span id="modelLeadLabel" data-i18n="mm.horizon">Lead operativo</span><select id="modelLeadSelect"></select></label>
         </div>
         <div class="model-metric-grid">
-          <article class="model-metric primary"><span data-i18n="mm.recursive">Enhanced recursive</span><b id="mmRecursiveValue">-</b><small id="mmTargetDate">-</small></article>
-          <article class="model-metric"><span data-i18n="mm.direct">Direct selezionato</span><b id="mmDirectValue">-</b><small data-i18n="mm.directAvailability">Disponibile a +1, +3, +5, +7 e +14</small></article>
-          <article class="model-metric"><span data-i18n="mm.delta">Enhanced meno GLM</span><b id="mmDeltaValue">-</b><small data-i18n="mm.deltaNote">Differenza tra due previsioni lagunari</small></article>
-          <article class="model-metric"><span data-i18n="mm.winner">Vincitore recursive</span><b class="model-name" id="mmWinnerModel">-</b><small id="mmWinnerNote">-</small></article>
+          <article class="model-metric primary"><span id="mmRecursiveLabel" data-i18n="mm.recursive">Enhanced recursive</span><b id="mmRecursiveValue">-</b><small id="mmTargetDate">-</small></article>
+          <article class="model-metric"><span id="mmDirectLabel" data-i18n="mm.direct">Direct selezionato</span><b id="mmDirectValue">-</b><small id="mmDirectNote" data-i18n="mm.directAvailability">Disponibile a +1, +3, +5, +7 e +14</small></article>
+          <article class="model-metric"><span id="mmDeltaLabel" data-i18n="mm.delta">Enhanced meno GLM</span><b id="mmDeltaValue">-</b><small id="mmDeltaNote" data-i18n="mm.deltaNote">Differenza tra due previsioni lagunari</small></article>
+          <article class="model-metric"><span id="mmWinnerLabel" data-i18n="mm.winner">Vincitore recursive</span><b class="model-name" id="mmWinnerModel">-</b><small id="mmWinnerNote">-</small></article>
         </div>
         <div class="model-status-line"><b id="mmIssueStatus">-</b><span id="mmFreshnessStatus">-</span></div>
         <p class="model-disclosure" data-i18n="mm.disclosure">Le metriche di skill riportate sotto derivano dal full run ufficiale del notebook 03.</p>
@@ -121,11 +121,11 @@
           <div class="panel-heading">
             <div><h3 data-i18n="trajectory.title">Traiettoria termica</h3><p data-i18n="trajectory.subtitle">Laguna modellata e superficie offshore non sono lo stesso target.</p></div>
             <div class="legend" aria-label="Legenda" data-i18n-aria="trajectory.legend">
-              <span><i class="line glm"></i>GLM 01</span>
-              <span><i class="line ours"></i>Enhanced recursive</span>
-              <span><i class="point direct"></i>Direct</span>
-              <span><i class="line cop"></i>Copernicus</span>
-              <span><i class="line sat"></i>Satellite</span>
+              <span id="legendGlmItem"><i class="line glm"></i><span id="legendGlmLabel">GLM 01</span></span>
+              <span id="legendEnhancedItem"><i class="line ours"></i><span id="legendEnhancedLabel" data-i18n="trajectory.enhanced">Enhanced / storico</span></span>
+              <span id="legendDirectItem"><i class="point direct"></i><span id="legendDirectLabel">Direct</span></span>
+              <span id="legendCopItem"><i class="line cop"></i><span id="legendCopLabel">Copernicus</span></span>
+              <span id="legendSatItem"><i class="line sat"></i><span id="legendSatLabel">Satellite</span></span>
             </div>
           </div>
           <div class="canvas-wrap"><canvas id="waterChart" role="img" aria-label="Grafico della traiettoria termica" data-i18n-aria="trajectory.chartAria"></canvas></div>
@@ -140,7 +140,7 @@
             <div><span data-i18n="reading.p90">Soglia p90</span><b id="p90Value">-</b></div>
             <div><span data-i18n="reading.p95">Soglia p95</span><b id="p95Value">-</b></div>
           </div>
-          <p class="caution" data-i18n="reading.caution">Un superamento modellato indica rischio termico. Non conferma una heatwave osservata senza un logger recente indipendente.</p>
+          <p class="caution" id="readingCaution" data-i18n="reading.caution">Un superamento modellato indica rischio termico. Non conferma una heatwave osservata senza un logger recente indipendente.</p>
         </aside>
       </div>
 
@@ -218,7 +218,7 @@
 
       <div class="dataset-stat-grid">
         <article class="dataset-stat"><span data-i18n="stats.records">Record pubblici</span><b id="statRecords">-</b><small data-i18n="stats.recordsNote">Serie operative, skill e verifica</small></article>
-        <article class="dataset-stat"><span data-i18n="stats.days">Giorni nella finestra</span><b id="statDays">-</b><small data-i18n="stats.daysNote">Acqua, meteo e proxy</small></article>
+        <article class="dataset-stat"><span data-i18n="stats.days">Giorni disponibili</span><b id="statDays">-</b><small data-i18n="stats.daysNote">Storico e finestra corrente</small></article>
         <article class="dataset-stat"><span data-i18n="stats.checks">Confronti di verifica</span><b id="statChecks">-</b><small data-i18n="stats.checksNote">Reale, originale e corretta</small></article>
         <article class="dataset-stat thermal"><span data-i18n="stats.thermal">Punti termici</span><b id="statThermal">-</b><small data-i18n="stats.thermalNote">GLM e multimodello operativo</small></article>
         <article class="dataset-stat"><span data-i18n="stats.horizons">Orizzonti valutati</span><b id="statHorizons">-</b><small data-i18n="stats.horizonsNote">Lead della verifica pubblica</small></article>
@@ -278,6 +278,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-clean" defer></script>
+  <script src="./app.js?v=20260810-history" defer></script>
 </body>
 </html>
