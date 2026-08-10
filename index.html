@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://amrierscuo.github.io/SantaGilla-Forecast-Lens/og.png">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://mds-wmts-dta.lobelia.earth; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
   <title>Santa Gilla Forecast Lens</title>
-  <link rel="stylesheet" href="./styles.css?v=20260810-clock">
+  <link rel="stylesheet" href="./styles.css?v=20260810-stats">
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Vai al contenuto</a>
@@ -31,6 +31,7 @@
           <a href="#acqua" data-i18n="nav.water">Acqua</a>
           <a href="#multimodello" data-i18n="nav.multimodel">Multimodello</a>
           <a href="#verifica" data-i18n="nav.verify">Verifica</a>
+          <a href="#statistiche" data-i18n="nav.stats">Statistiche</a>
           <a href="#fonti" data-i18n="nav.sources">Fonti</a>
         </div>
         <div class="language-switch" role="group" aria-label="Lingua" data-i18n-aria="language.label">
@@ -206,6 +207,40 @@
       </article>
     </section>
 
+    <section class="section dataset-section" id="statistiche" aria-labelledby="datasetTitle">
+      <div class="section-heading dataset-heading">
+        <div>
+          <p class="eyebrow dark" data-i18n="stats.eyebrow">Copertura pubblica</p>
+          <h2 id="datasetTitle" data-i18n="stats.title">Dataset in numeri</h2>
+          <p class="section-intro" data-i18n="stats.intro">Conteggi calcolati direttamente dallo snapshot pubblico, senza esporre dati osservativi privati.</p>
+        </div>
+        <span class="dataset-version" id="datasetVersion">v-</span>
+      </div>
+
+      <div class="dataset-stat-grid">
+        <article class="dataset-stat"><span data-i18n="stats.records">Record pubblici</span><b id="statRecords">-</b><small data-i18n="stats.recordsNote">Serie operative, skill e verifica</small></article>
+        <article class="dataset-stat"><span data-i18n="stats.days">Giorni nella finestra</span><b id="statDays">-</b><small data-i18n="stats.daysNote">Acqua, meteo e proxy</small></article>
+        <article class="dataset-stat"><span data-i18n="stats.checks">Confronti di verifica</span><b id="statChecks">-</b><small data-i18n="stats.checksNote">Reale, originale e corretta</small></article>
+        <article class="dataset-stat thermal"><span data-i18n="stats.thermal">Punti termici</span><b id="statThermal">-</b><small data-i18n="stats.thermalNote">GLM e multimodello operativo</small></article>
+        <article class="dataset-stat"><span data-i18n="stats.horizons">Orizzonti valutati</span><b id="statHorizons">-</b><small data-i18n="stats.horizonsNote">Lead della verifica pubblica</small></article>
+        <article class="dataset-stat"><span data-i18n="stats.sources">Fonti tracciate</span><b id="statSources">-</b><small data-i18n="stats.sourcesNote">Servizi pubblici ufficiali</small></article>
+      </div>
+
+      <aside class="timestamp-zone" aria-label="Timestamp consolidati dei dati" data-i18n-aria="stats.timestampsAria">
+        <div class="timestamp-heading">
+          <div><span class="timestamp-dot" aria-hidden="true"></span><b data-i18n="stats.timestampsTitle">Timestamp dati</b></div>
+          <p data-i18n="stats.timestampsIntro">Una sola zona per gli aggiornamenti, con sorgenti aventi la stessa data raggruppate.</p>
+          <span class="timezone-pill">Europe/Rome</span>
+        </div>
+        <div class="timestamp-grid">
+          <div><span data-i18n="stats.snapshot">Snapshot pubblico</span><time id="datasetGenerated" datetime="">-</time></div>
+          <div><span data-i18n="stats.issue">Emissione forecast</span><time id="datasetIssue" datetime="">-</time></div>
+          <div><span data-i18n="stats.coverage">Copertura corrente</span><b id="datasetCoverage">-</b></div>
+          <div class="availability"><span data-i18n="stats.availability">Ultima disponibilità</span><b id="datasetAvailability">-</b></div>
+        </div>
+      </aside>
+    </section>
+
     <section class="section source-section" id="fonti" aria-labelledby="sourcesTitle">
       <div class="section-heading"><div><p class="eyebrow dark" data-i18n="sources.eyebrow">Tracciabilità</p><h2 id="sourcesTitle" data-i18n="sources.title">Cosa usa questa previsione</h2></div></div>
       <div class="source-layout">
@@ -238,11 +273,9 @@
         </div>
         <div class="hero-status technical-status" aria-label="Stato del prodotto" data-i18n-aria="status.aria">
           <div class="status-line"><span class="pulse" aria-hidden="true"></span><b data-i18n="status.snapshot">Snapshot verificato</b></div>
-          <div class="status-date" id="generatedDate" data-i18n="status.loading">Caricamento</div>
           <dl>
             <div><dt data-i18n="status.area">Area</dt><dd>Santa Gilla</dd></div>
             <div><dt data-i18n="status.model">Modello</dt><dd>GLM 01 + MM 03</dd></div>
-            <div><dt data-i18n="status.validTo">Valido fino al</dt><dd id="validThrough">-</dd></div>
             <div><dt data-i18n="status.access">Accesso</dt><dd>Read-only</dd></div>
           </dl>
           <p data-i18n="status.privacy">Nessun dato osservativo privato è distribuito dal sito.</p>
@@ -259,6 +292,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <noscript data-i18n="noscript">Il tool richiede JavaScript per grafici e selezione delle date.</noscript>
   <script src="./data/forecast_public.js"></script>
-  <script src="./app.js?v=20260810-clock" defer></script>
+  <script src="./app.js?v=20260810-stats" defer></script>
 </body>
 </html>

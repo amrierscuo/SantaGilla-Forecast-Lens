@@ -17,7 +17,7 @@ const TEXT = {
   it: {
     "meta.description": "Confronto operativo tra la previsione termica modellata per Santa Gilla, Copernicus Marine e dati meteorologici pubblici.",
     skip: "Vai al contenuto",
-    "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.multimodel": "Multimodello", "nav.verify": "Verifica", "nav.sources": "Fonti",
+    "nav.label": "Navigazione principale", "nav.water": "Acqua", "nav.multimodel": "Multimodello", "nav.verify": "Verifica", "nav.stats": "Statistiche", "nav.sources": "Fonti",
     "language.label": "Lingua dell'interfaccia",
     "hero.eyebrow": "Indicatore operativo scientifico", "hero.title": "Previsione lagunare e mare aperto, nello stesso quadro.",
     "hero.lead": "Il nostro modello enhanced resta in primo piano. Copernicus Marine, satellite e meteo pubblico forniscono il contesto necessario per leggere differenze, traiettorie e limiti.",
@@ -72,6 +72,19 @@ const TEXT = {
     "skill.observed": "Direct observed-day", "skill.recursiveLegend": "Recursive rollout", "skill.chartAria": "Metriche aggregate del notebook 03",
     "skill.privacy": "Nessuna temperatura d'acqua osservata riga-per-riga e pubblicata.",
     "skill.sample": "Observed-day n={direct}; recursive n={recursive}. Metriche aggregate del full run ufficiale.",
+    "stats.eyebrow": "Copertura pubblica", "stats.title": "Dataset in numeri",
+    "stats.intro": "Conteggi calcolati direttamente dallo snapshot pubblico, senza esporre dati osservativi privati.",
+    "stats.records": "Record pubblici", "stats.recordsNote": "Serie operative, skill e verifica",
+    "stats.days": "Giorni nella finestra", "stats.daysNote": "Acqua, meteo e proxy",
+    "stats.checks": "Confronti di verifica", "stats.checksNote": "Reale, originale e corretta",
+    "stats.thermal": "Punti termici", "stats.thermalNote": "GLM e multimodello operativo",
+    "stats.horizons": "Orizzonti valutati", "stats.horizonsNote": "Lead della verifica pubblica",
+    "stats.sources": "Fonti tracciate", "stats.sourcesNote": "Servizi pubblici ufficiali",
+    "stats.timestampsAria": "Timestamp consolidati dei dati", "stats.timestampsTitle": "Timestamp dati",
+    "stats.timestampsIntro": "Una sola zona per gli aggiornamenti, con sorgenti aventi la stessa data raggruppate.",
+    "stats.snapshot": "Snapshot pubblico", "stats.issue": "Emissione forecast", "stats.coverage": "Copertura corrente",
+    "stats.availability": "Ultima disponibilità", "stats.copModel": "Modello Copernicus", "stats.satellite": "Satellite L4",
+    "stats.weather": "Meteo", "stats.marineProxy": "Proxy marino",
     "sources.eyebrow": "Tracciabilità", "sources.title": "Cosa usa questa previsione", "sources.open": "Apri la fonte ufficiale ↗",
     "privacy.badge": "PRIVATO", "privacy.title": "Confine privato",
     "privacy.text": "Gli Excel scientifici originali, le osservazioni riga-per-riga, i coefficienti e il file addestrato non sono inclusi né richiesti dal sito.",
@@ -95,7 +108,7 @@ const TEXT = {
   en: {
     "meta.description": "Operational comparison of the Santa Gilla modelled thermal forecast, Copernicus Marine and public weather data.",
     skip: "Skip to content",
-    "nav.label": "Main navigation", "nav.water": "Water", "nav.multimodel": "Multimodel", "nav.verify": "Verification", "nav.sources": "Sources",
+    "nav.label": "Main navigation", "nav.water": "Water", "nav.multimodel": "Multimodel", "nav.verify": "Verification", "nav.stats": "Statistics", "nav.sources": "Sources",
     "language.label": "Interface language",
     "hero.eyebrow": "Scientific operational indicator", "hero.title": "Lagoon forecast and open sea, in one view.",
     "hero.lead": "Our enhanced model remains in focus. Copernicus Marine, satellite and public weather data provide the context needed to read differences, trajectories and limitations.",
@@ -150,6 +163,19 @@ const TEXT = {
     "skill.observed": "Direct observed-day", "skill.recursiveLegend": "Recursive rollout", "skill.chartAria": "Aggregate Notebook 03 metrics",
     "skill.privacy": "No row-level observed water temperature is published.",
     "skill.sample": "Observed-day n={direct}; recursive n={recursive}. Aggregate metrics from the official full run.",
+    "stats.eyebrow": "Public coverage", "stats.title": "Dataset by the numbers",
+    "stats.intro": "Counts calculated directly from the public snapshot, without exposing private observational data.",
+    "stats.records": "Public records", "stats.recordsNote": "Operational, skill and verification series",
+    "stats.days": "Days in the window", "stats.daysNote": "Water, weather and proxy",
+    "stats.checks": "Verification comparisons", "stats.checksNote": "Observed, original and corrected",
+    "stats.thermal": "Thermal points", "stats.thermalNote": "GLM and operational multimodel",
+    "stats.horizons": "Evaluated horizons", "stats.horizonsNote": "Public verification leads",
+    "stats.sources": "Tracked sources", "stats.sourcesNote": "Official public services",
+    "stats.timestampsAria": "Consolidated data timestamps", "stats.timestampsTitle": "Data timestamps",
+    "stats.timestampsIntro": "One update area, with sources sharing the same date grouped together.",
+    "stats.snapshot": "Public snapshot", "stats.issue": "Forecast issue", "stats.coverage": "Current coverage",
+    "stats.availability": "Latest availability", "stats.copModel": "Copernicus model", "stats.satellite": "L4 satellite",
+    "stats.weather": "Weather", "stats.marineProxy": "Marine proxy",
     "sources.eyebrow": "Traceability", "sources.title": "What this forecast uses", "sources.open": "Open official source ↗",
     "privacy.badge": "PRIVATE", "privacy.title": "Private boundary",
     "privacy.text": "Original scientific spreadsheets, row-level observations, coefficients and the trained file are neither included nor required by this site.",
@@ -208,6 +234,10 @@ function localDate(iso) {
   return new Intl.DateTimeFormat(locale(), { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
 }
 
+function latestDate(rows) {
+  return (rows || []).map((row) => row.date).filter(Boolean).sort().at(-1) || null;
+}
+
 function updateClock() {
   const node = $("#liveClock");
   if (!node) return;
@@ -230,9 +260,66 @@ function startClock() {
 
 function setGeneratedDate() {
   if (!DATA) return;
-  const date = new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(DATA.meta.generated_at));
-  $("#generatedDate").textContent = t("status.updated", { date });
-  $("#validThrough").textContent = localDate(DATA.meta.valid_to || DATA.multimodel_03.meta.valid_through);
+  const generatedAt = new Date(DATA.meta.generated_at);
+  const generated = new Intl.DateTimeFormat(locale(), {
+    dateStyle: "medium",
+    timeStyle: "medium",
+    timeZone: "Europe/Rome"
+  }).format(generatedAt);
+  const generatedNode = $("#datasetGenerated");
+  generatedNode.textContent = generated;
+  generatedNode.dateTime = generatedAt.toISOString();
+
+  const issueDate = DATA.multimodel_03.meta.issue_date;
+  const issueNode = $("#datasetIssue");
+  issueNode.textContent = localDate(issueDate);
+  issueNode.dateTime = issueDate;
+  $("#datasetCoverage").textContent = `${localDate(DATA.meta.valid_from)} - ${localDate(DATA.meta.valid_to || DATA.multimodel_03.meta.valid_through)}`;
+}
+
+function renderDatasetStats() {
+  const multimodel = DATA.multimodel_03;
+  const collections = [
+    DATA.water_forecast,
+    multimodel.operational,
+    multimodel.direct_full_run_skill,
+    multimodel.observed_day_skill,
+    multimodel.recursive_skill,
+    DATA.copernicus.model_daily,
+    DATA.copernicus.satellite_daily,
+    DATA.offshore_proxy,
+    DATA.weather,
+    DATA.air_verification.performance,
+    DATA.air_verification.daily
+  ];
+  const records = collections.reduce((total, rows) => total + (Array.isArray(rows) ? rows.length : 0), 0);
+  const horizons = new Set(DATA.air_verification.performance.map((row) => row.lead_days));
+  const count = (value) => new Intl.NumberFormat(locale()).format(value);
+
+  $("#statRecords").textContent = count(records);
+  $("#statDays").textContent = count(DATA.water_forecast.length);
+  $("#statChecks").textContent = count(DATA.air_verification.daily.length);
+  $("#statThermal").textContent = count(DATA.water_forecast.length + multimodel.operational.length);
+  $("#statHorizons").textContent = count(horizons.size);
+  $("#statSources").textContent = count(DATA.sources.length);
+  $("#datasetVersion").textContent = `v${DATA.meta.version}`;
+
+  const availability = [
+    { label: t("stats.copModel"), date: latestDate(DATA.copernicus.model_daily) },
+    { label: t("stats.satellite"), date: latestDate(DATA.copernicus.satellite_daily) },
+    { label: t("stats.weather"), date: latestDate(DATA.weather) },
+    { label: t("stats.marineProxy"), date: latestDate(DATA.offshore_proxy) }
+  ];
+  const grouped = new Map();
+  availability.forEach(({ label, date }) => {
+    if (!date) return;
+    if (!grouped.has(date)) grouped.set(date, []);
+    grouped.get(date).push(label);
+  });
+  $("#datasetAvailability").textContent = [...grouped.entries()]
+    .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
+    .map(([date, labels]) => `${labels.join(" + ")}: ${localDate(date)}`)
+    .join(" / ");
 }
 
 function applyLanguage(lang, persist = true) {
@@ -248,6 +335,7 @@ function applyLanguage(lang, persist = true) {
   updateClock();
   if (DATA) {
     setGeneratedDate();
+    renderDatasetStats();
     renderSources();
     updateDay();
     updateMultimodel();
@@ -646,6 +734,7 @@ async function init() {
       DATA = await response.json();
     }
     setGeneratedDate();
+    renderDatasetStats();
     renderSources();
     bindEvents();
     setDate(DATA.meta.reference_date);
