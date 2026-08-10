@@ -46,3 +46,9 @@ body{background-image:linear-gradient(rgba(243,246,242,.965),rgba(243,246,242,.9
 .line.glm{height:2px;background:#76535b}.line.fullrun{background:#176ea6}.line.observed{background:#d84a5f}.line.recursive{background:#24805f}.point{display:inline-block;width:9px;height:9px;transform:rotate(45deg);border-radius:2px}.point.direct{background:#d99a35}.skill-section{border-top:1px solid var(--line)}.skill-panel{border-width:4px;background-image:linear-gradient(#fff,#fff),linear-gradient(rgba(216,74,95,.4),rgba(36,128,95,.18)),url("./assets/textures/quantum-metal.jpg")}.skill-metrics .metric-model{font-size:18px;line-height:1.18;overflow-wrap:anywhere}.skill-metrics article:first-child{border-color:rgba(216,74,95,.35)}
 @media(max-width:1050px){.model-metric-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.model-console{padding:18px;border-width:3px}.model-console-heading{display:grid;align-items:start}.model-console-heading .select-control{width:100%}.model-metric-grid{grid-template-columns:1fr}.model-metric{min-height:108px}}
+
+/* Live local-time clock */
+.live-clock{align-self:stretch;min-width:112px;padding:6px 10px;border:2px solid transparent;border-radius:11px;display:grid;align-content:center;gap:1px;background-image:linear-gradient(rgba(241,248,245,.97),rgba(241,248,245,.97)),linear-gradient(rgba(28,98,88,.4),rgba(23,110,166,.16)),url("./assets/textures/quantum-ice.jpg");background-origin:border-box;background-clip:padding-box,border-box,border-box;background-blend-mode:normal,multiply,normal;box-shadow:inset 0 0 0 1px rgba(255,255,255,.72)}
+.live-clock span{color:var(--muted);font-size:9px;font-weight:850;letter-spacing:.1em;line-height:1.1;text-transform:uppercase}
+.live-clock time{color:var(--deep);font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.045em;line-height:1.15;white-space:nowrap}
+@media(max-width:720px){.live-clock{min-width:106px;flex:0 0 auto}.live-clock time{font-size:17px}}

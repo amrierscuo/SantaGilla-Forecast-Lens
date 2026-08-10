@@ -49,6 +49,10 @@
           <h1 class="tool-title" id="waterTitle" data-i18n="water.title">Acqua modellata e contesto Copernicus</h1>
         </div>
         <div class="date-controls" aria-label="Seleziona la data" data-i18n-aria="water.dateSelector">
+          <div class="live-clock" aria-label="Orologio in ora locale di Cagliari" data-i18n-aria="clock.aria">
+            <span data-i18n="clock.label">Ora locale</span>
+            <time id="liveClock" role="timer" datetime="">--:--:--</time>
+          </div>
           <button id="prevDate" class="icon-button" type="button" aria-label="Data precedente" data-i18n-aria="water.previous">←</button>
           <label><span data-i18n="water.date">Data</span><input id="datePicker" type="date"></label>
           <button id="nextDate" class="icon-button" type="button" aria-label="Data successiva" data-i18n-aria="water.next">→</button>

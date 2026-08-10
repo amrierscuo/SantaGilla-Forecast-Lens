@@ -5,6 +5,7 @@ const $ = (selector) => document.querySelector(selector);
 let DATA;
 let selectedDate;
 let currentLang = "it";
+let clockTimer;
 
 try {
   currentLang = localStorage.getItem("sg-language") === "en" ? "en" : "it";
@@ -24,6 +25,7 @@ const TEXT = {
     "status.aria": "Stato del prodotto", "status.snapshot": "Snapshot verificato", "status.loading": "Caricamento",
     "status.updated": "Aggiornato {date}", "status.area": "Area", "status.model": "Modello", "status.validTo": "Valido fino al", "status.access": "Accesso",
     "status.privacy": "Nessun dato osservativo privato è distribuito dal sito.",
+    "clock.label": "Ora locale", "clock.aria": "Orologio in ora locale di Cagliari",
     "water.eyebrow": "Confronto termico giornaliero", "water.title": "Acqua modellata e contesto Copernicus",
     "water.dateSelector": "Seleziona la data", "water.previous": "Data precedente", "water.date": "Data", "water.next": "Data successiva", "water.today": "Oggi",
     "water.ourModel": "Nostro modello", "water.lagoon": "Acqua Santa Gilla", "water.rangeUnavailable": "Intervallo non disponibile",
@@ -101,6 +103,7 @@ const TEXT = {
     "status.aria": "Product status", "status.snapshot": "Verified snapshot", "status.loading": "Loading",
     "status.updated": "Updated {date}", "status.area": "Area", "status.model": "Model", "status.validTo": "Valid through", "status.access": "Access",
     "status.privacy": "No private observational data are distributed by this site.",
+    "clock.label": "Local time", "clock.aria": "Clock in Cagliari local time",
     "water.eyebrow": "Daily thermal comparison", "water.title": "Modelled water and Copernicus context",
     "water.dateSelector": "Select date", "water.previous": "Previous date", "water.date": "Date", "water.next": "Next date", "water.today": "Today",
     "water.ourModel": "Our model", "water.lagoon": "Santa Gilla water", "water.rangeUnavailable": "Range unavailable",
@@ -205,6 +208,26 @@ function localDate(iso) {
   return new Intl.DateTimeFormat(locale(), { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
 }
 
+function updateClock() {
+  const node = $("#liveClock");
+  if (!node) return;
+  const now = new Date();
+  node.textContent = new Intl.DateTimeFormat(locale(), {
+    timeZone: "Europe/Rome",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  }).format(now);
+  node.dateTime = now.toISOString();
+}
+
+function startClock() {
+  updateClock();
+  window.clearInterval(clockTimer);
+  clockTimer = window.setInterval(updateClock, 1000);
+}
+
 function setGeneratedDate() {
   if (!DATA) return;
   const date = new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeStyle: "short" }).format(new Date(DATA.meta.generated_at));
@@ -222,6 +245,7 @@ function applyLanguage(lang, persist = true) {
   document.querySelectorAll("[data-i18n-aria]").forEach((node) => { node.setAttribute("aria-label", t(node.dataset.i18nAria)); });
   document.querySelectorAll("[data-i18n-content]").forEach((node) => { node.setAttribute("content", t(node.dataset.i18nContent)); });
   document.querySelectorAll("[data-lang]").forEach((button) => { button.setAttribute("aria-pressed", String(button.dataset.lang === currentLang)); });
+  updateClock();
   if (DATA) {
     setGeneratedDate();
     renderSources();
@@ -612,6 +636,7 @@ function bindEvents() {
 async function init() {
   bindLanguageSwitch();
   applyLanguage(currentLang, false);
+  startClock();
   try {
     if (window.__SANTA_GILLA_PUBLIC_DATA__) {
       DATA = window.__SANTA_GILLA_PUBLIC_DATA__;
