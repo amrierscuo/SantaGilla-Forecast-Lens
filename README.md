@@ -1,5 +1,7 @@
 # Santa Gilla Forecast Lens
 
+[https://amrierscuo.github.io/SantaGilla-Forecast-Lens/](https://amrierscuo.github.io/SantaGilla-Forecast-Lens/)
+
 Tool pubblico read-only per confrontare la baseline GLM 01, le traiettorie operative direct e recursive del notebook 03, il modello Copernicus Marine sul punto offshore nel Golfo di Cagliari, la SST satellitare Copernicus L4 NRT, proxy marini, forcing meteorologico pubblico e la verifica omogenea delle previsioni meteorologiche.
 
 Il selettore anno espone la ricostruzione giornaliera ufficiale 1995-2024: 10.958 giorni con temperatura d'acqua ricostruita, climatologia 1982-2011, p90, p95, anomalia e classificazione heatwave-like. Il successivo archivio 2025-2026 resta dedicato al confronto fra riferimento modellato, previsione originale e previsione corretta.
