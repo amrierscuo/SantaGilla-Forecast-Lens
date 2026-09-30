@@ -1,7 +1,7 @@
 {
   "file": "forecast_public.json",
-  "bytes": 2726099,
-  "sha256": "ca036f7437c708c9a67d48fe283b4991e7e1cf76bc467d65a58518b0440ffe16",
+  "bytes": 2729531,
+  "sha256": "c0466e481b570b4dbce1ca01945ab8e2162ac3067a605ece982d50ca7989f685",
   "water_forecast_rows": 17,
   "water_history_rows": 1330,
   "water_reconstruction_rows": 10958,
